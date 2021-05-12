@@ -1,0 +1,11 @@
+.consultation-list {
+  border: 20px solid rgb(231, 225, 225);
+  border-radius: 10px;
+}
+.navbar li {
+  margin: 10px;
+}
+
+.navbar a {
+  text-decoration: none;
+}
