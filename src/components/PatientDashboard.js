@@ -1,13 +1,40 @@
 import { React, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "./../api";
+import moment from "moment";
 import "./../styles/patient-dashboard.css";
-export default function PatientDashboard() {
-  const [patients, setPatients] = useState();
+
+export default function PatientDashboard({ match, history }) {
+  const [consultationInfo, setConsultationInfo] = useState([]);
+  const [patientInfo, setPatientInfo] = useState({ name: "", id: "" });
+  const pid = match.params.id;
+  useEffect(() => {
+    //get all consultation details of the patient
+    //along with doctor name
+    api.get(`/consultation/patient/${pid}`).then((res) => {
+      res.data.map((con) => {
+        return api.get(`/doctor/${con.did}`).then((doc) => {
+          con["dname"] = doc.data[0].dname;
+          con["cdatetime"] = moment(con.cdatetime).format("h:mm a, MMM Do YY");
+          setConsultationInfo((prev) => [...prev, con]);
+        });
+      });
+    });
+  }, [pid]);
 
   useEffect(() => {
-    api.get("/patient").then((res) => setPatients(res.data));
-  }, []);
+    //get patient name and ID to display on navbar
+    let parsed = Number.parseInt(pid);
+    if (Number.isNaN(parsed)) {
+      history.push("/404");
+    }
+
+    api.get(`/patient/${pid}`).then((res) => {
+      if (res.data.length > 0) {
+        setPatientInfo({ name: res.data[0].pname, id: res.data[0].pid });
+      }
+    });
+  }, [pid, history]);
 
   return (
     <div>
@@ -20,7 +47,11 @@ export default function PatientDashboard() {
             <li className="nav-item">doctors</li>
             <li className="nav-item">appointments</li>
             <li className="nav-item">book an appointment</li>
-            <li className="nav-item">NAME-PID</li>
+            <li className="nav-item info">
+              <strong>
+                {patientInfo.name}-{patientInfo.id}
+              </strong>
+            </li>
           </ul>
         </div>
       </nav>
@@ -36,12 +67,13 @@ export default function PatientDashboard() {
             </tr>
           </thead>
           <tbody>
-            {patients && patients.length ? (
-              patients.map((patient) => {
+            {consultationInfo && consultationInfo.length ? (
+              consultationInfo.map((consultation) => {
                 return (
-                  <tr key={patient.pid}>
-                    <td>{patient.pname}</td>
-                    <td>{patient.pphno}</td>
+                  <tr key={consultation.cid}>
+                    <td>{consultation.cid}</td>
+                    <td>{consultation.dname}</td>
+                    <td>{consultation.cdatetime}</td>
                     <td>
                       <input
                         type="button"
@@ -56,7 +88,6 @@ export default function PatientDashboard() {
                         value="LISTEN"
                       />
                     </td>
-                    <td>{patient.dob}</td>
                   </tr>
                 );
               })
