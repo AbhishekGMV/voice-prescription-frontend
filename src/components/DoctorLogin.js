@@ -26,7 +26,7 @@ export default class DoctorLogin extends React.Component {
   render() {
     return (
       <div>
-        <Navbar/>
+        <Navbar />
         <div className="form-group">
           <form onSubmit={this.handleSubmit}>
             <label>Doctor login</label>

@@ -3,7 +3,9 @@ import api from "./../api";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
 import "./../styles/login.css";
-
+// import { Route } from "react-router-dom";
+// import PatientDashboard from "./PatientDashboard";
+// import { Redirect } from "react-router-dom";
 export default class PatientLogin extends React.Component {
   initialState = { phoneNumber: "", password: "", error: false };
   state = this.initialState;
@@ -15,8 +17,8 @@ export default class PatientLogin extends React.Component {
         password: this.state.password,
       })
       .then((response) => {
-        // console.log(response);
-        this.props.history.push("/patient/dashboard");
+        const pid = response.data.pid;
+        this.props.history.push(`/patient/${pid}`);
       })
       .catch((err) => {
         console.error(err);

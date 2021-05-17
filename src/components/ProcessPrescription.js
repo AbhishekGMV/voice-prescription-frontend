@@ -1,6 +1,9 @@
 import React from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
+
+// import ReactPlayer from "react-player";
+
 export default class ProcessPrescription extends React.Component {
   constructor(props) {
     super(props);
@@ -8,6 +11,7 @@ export default class ProcessPrescription extends React.Component {
       selectedFile: null,
       responseText: "",
       loading: false,
+      error: false,
     };
   }
 
@@ -36,11 +40,15 @@ export default class ProcessPrescription extends React.Component {
       .then((res) => {
         this.setState({
           loading: false,
+          error: false,
           responseText: res.data.responseText,
         });
       })
       .catch((err) => {
-        console.error(err);
+        this.setState({
+          loading: false,
+          error: true,
+        });
       });
   };
 
@@ -51,6 +59,12 @@ export default class ProcessPrescription extends React.Component {
           <div className="spinner-border" role="status"></div>
           <span className="sr-only">Processing prescription...</span>
         </div>
+      );
+    } else if (this.state.error) {
+      return (
+        <p className="error" style={{ color: "red" }}>
+          Unable to process request...
+        </p>
       );
     } else {
       return (
@@ -67,6 +81,7 @@ export default class ProcessPrescription extends React.Component {
   render() {
     return (
       <div>
+        {/* <ReactPlayer url="https://drive.google.com/file/d/1HB4UaNOGUFxDRpSngshNf5OhViGOaJk-/view?usp=sharing" /> */}
         <Navbar />
         <input type="file" onChange={this.onChangeHandler} />
         <button
@@ -81,3 +96,15 @@ export default class ProcessPrescription extends React.Component {
     );
   }
 }
+
+// {
+//   medsname: {
+//     ['med1','med2','med3','med4']
+//  }
+//  timing: {
+//     []
+//  }
+//  diet_exercise: {
+
+//  }
+// }
