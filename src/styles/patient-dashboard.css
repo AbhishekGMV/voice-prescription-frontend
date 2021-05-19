@@ -9,3 +9,13 @@
 .navbar a {
   text-decoration: none;
 }
+
+.user-info {
+  text-transform: uppercase;
+  list-style: none;
+  margin-right: 30px;
+}
+
+.fa-icon {
+  margin-right: 10px;
+}
