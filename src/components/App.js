@@ -7,7 +7,9 @@ import DoctorLogin from "./DoctorLogin";
 import DoctorRegister from "./DoctorRegister";
 import PatientDashboard from "./PatientDashboard";
 import ProcessPrescription from "./ProcessPrescription";
+import PatientAppointment from "./PatientAppointment";
 import PageNotFound from "./PageNotFound";
+import Doctor from "./Doctor";
 
 function App() {
   return (
@@ -17,9 +19,15 @@ function App() {
           <Route path="/" exact component={Homepage} />
           <Route path="/patient/login" exact component={PatientLogin} />
           <Route path="/patient/register" exact component={PatientRegister} />
+          <Route path="/patient/:id" exact component={PatientDashboard} />
+          <Route
+            path="/patient/:id/appointment"
+            exact
+            component={PatientAppointment}
+          />
+          <Route path="/doctors" exact component={Doctor} />
           <Route path="/doctor/login" exact component={DoctorLogin} />
           <Route path="/doctor/register" exact component={DoctorRegister} />
-          <Route path="/patient/:id" exact component={PatientDashboard} />
           <Route
             path="/doctor/process-prescription"
             exact
