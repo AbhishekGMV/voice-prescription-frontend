@@ -10,6 +10,8 @@ import ProcessPrescription from "./ProcessPrescription";
 import PatientAppointment from "./PatientAppointment";
 import PageNotFound from "./PageNotFound";
 import Doctor from "./Doctor";
+import BookingPage from "./BookingPage";
+import BookingSummary from "./BookingSummary";
 
 function App() {
   return (
@@ -32,6 +34,11 @@ function App() {
             path="/doctor/process-prescription"
             exact
             component={ProcessPrescription}
+          />
+          <Route path="/patient/:id/booking" exact component={BookingPage} />
+          <Route
+            path="/patient/:id/booking-summary"
+            render={(props) => <BookingSummary {...props} />}
           />
           <Route path="/404" component={PageNotFound} />
           <Route component={PageNotFound} />

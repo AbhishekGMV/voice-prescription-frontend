@@ -16,15 +16,15 @@ export default function UserNavbar({ userInfo, userRole }) {
             <li className="nav-item">
               <Link to={`/${userRole}/${id}/appointment`}>Appointments</Link>
             </li>
-            {userRole === "patient" ? (
+            {userRole === "patient" && (
               <>
                 <li className="nav-item">
                   <Link to="/doctors">Doctors</Link>
                 </li>
-                <li className="nav-item">Book an appointment</li>
+                <li className="nav-item">
+                  <Link to={`/patient/${id}/booking`}>Book an appointment</Link>
+                </li>
               </>
-            ) : (
-              ""
             )}
           </ul>
         </div>
@@ -34,6 +34,9 @@ export default function UserNavbar({ userInfo, userRole }) {
             {name}-{id}
           </li>
         </span>
+        <li style={{ listStyle: "none" }} className="nav-item">
+          <Link to="/">LOGOUT</Link>
+        </li>
       </nav>
     </div>
   );

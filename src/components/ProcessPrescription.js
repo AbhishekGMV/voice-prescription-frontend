@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import Navbar from "./Navbar";
 
 // import ReactPlayer from "react-player";
 
@@ -82,7 +81,6 @@ export default class ProcessPrescription extends React.Component {
     return (
       <div>
         {/* <ReactPlayer url="https://drive.google.com/file/d/1HB4UaNOGUFxDRpSngshNf5OhViGOaJk-/view?usp=sharing" /> */}
-        <Navbar />
         <input type="file" onChange={this.onChangeHandler} />
         <button
           type="button"

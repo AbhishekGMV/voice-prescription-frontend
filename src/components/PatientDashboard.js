@@ -3,6 +3,7 @@ import api from "./../api";
 import moment from "moment";
 import UserNavbar from "./UserNavbar";
 import "./../styles/patient-dashboard.css";
+// import { Button } from "react-bootstrap";
 
 export default function PatientDashboard({ match, history }) {
   const [consultationInfo, setConsultationInfo] = useState([]);
@@ -36,7 +37,7 @@ export default function PatientDashboard({ match, history }) {
     <div>
       <UserNavbar userRole={"patient"} userInfo={patientInfo} />
       {consultationInfo.length === 0 ? (
-        <div style={{ textAlign: "center" }}>
+        <div style={{ textAlign: "center", marginTop: "100px" }}>
           <strong>All your consultation details will appear here</strong>
         </div>
       ) : (
@@ -59,18 +60,22 @@ export default function PatientDashboard({ match, history }) {
                     <td>{consultation.dname}</td>
                     <td>{consultation.cdatetime}</td>
                     <td>
+                      {/* <input type="button" className="btn btn-success btn-sm"> */}
                       <input
                         type="button"
                         className="btn btn-success btn-sm"
                         value="VIEW"
                       />
+                      {/* </input> */}
                     </td>
                     <td>
-                      <input
-                        type="button"
+                      {/* brute force to play files*/}
+                      <a
                         className="btn btn-danger btn-sm"
-                        value="LISTEN"
-                      />
+                        href={consultation.audio}
+                      >
+                        LISTEN
+                      </a>
                     </td>
                   </tr>
                 );

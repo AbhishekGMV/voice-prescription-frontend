@@ -1,7 +1,6 @@
 import React from "react";
 import api from "./../api";
 import { Link } from "react-router-dom";
-import Navbar from "./Navbar";
 import "./../styles/login.css";
 
 export default class DoctorLogin extends React.Component {
@@ -10,6 +9,7 @@ export default class DoctorLogin extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    this.setState({ error: false });
     api
       .post("/doctor/login", {
         phno: this.state.phoneNumber,
@@ -26,7 +26,6 @@ export default class DoctorLogin extends React.Component {
   render() {
     return (
       <div>
-        <Navbar />
         <div className="form-group">
           <form onSubmit={this.handleSubmit}>
             <label>Doctor login</label>

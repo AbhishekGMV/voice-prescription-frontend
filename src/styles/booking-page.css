@@ -1,0 +1,19 @@
+.card {
+  width: 20rem;
+  margin: 5px;
+  text-align: center;
+}
+
+.card a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.slots-card {
+  cursor: pointer;
+}
+
+.field-selected {
+  background-color: green;
+  color: white;
+}

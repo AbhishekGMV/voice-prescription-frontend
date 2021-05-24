@@ -1,7 +1,6 @@
 import React from "react";
 import api from "./../api";
 import { Link } from "react-router-dom";
-import Navbar from "./Navbar";
 import "./../styles/register.css";
 
 export default class PatientRegister extends React.Component {
@@ -18,6 +17,7 @@ export default class PatientRegister extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    this.setState({ error: false });
     if (this.state.password !== this.state.confirmPassword) {
       this.setState({ error: true });
     } else {
@@ -41,7 +41,6 @@ export default class PatientRegister extends React.Component {
   render() {
     return (
       <div>
-        <Navbar />
         <form onSubmit={this.handleSubmit}>
           <label>Doctor register</label>
           <div className="input-group mb-3">

@@ -1,16 +1,14 @@
 import React from "react";
 import api from "./../api";
 import { Link } from "react-router-dom";
-import Navbar from "./Navbar";
 import "./../styles/login.css";
-// import { Route } from "react-router-dom";
-// import PatientDashboard from "./PatientDashboard";
-// import { Redirect } from "react-router-dom";
 export default class PatientLogin extends React.Component {
   initialState = { phoneNumber: "", password: "", error: false };
   state = this.initialState;
+
   handleSubmit = (e) => {
     e.preventDefault();
+    this.setState({ error: false });
     api
       .post("/patient/login", {
         phno: this.state.phoneNumber,
@@ -29,7 +27,6 @@ export default class PatientLogin extends React.Component {
   render() {
     return (
       <div>
-        <Navbar />
         <div></div>
         <div className="form-group">
           <form onSubmit={this.handleSubmit}>
@@ -67,7 +64,7 @@ export default class PatientLogin extends React.Component {
             ) : (
               ""
             )}
-            <span>Don't have an account? </span>{" "}
+            <span>Don't have an account? </span>
             <Link to="/patient/register">Register here</Link>
           </form>
         </div>

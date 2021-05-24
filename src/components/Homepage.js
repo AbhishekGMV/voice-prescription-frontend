@@ -1,9 +1,21 @@
 import React from "react";
-import Navbar from "./Navbar";
+import { Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import "./../styles/homepage.css";
+
 export default function Homepage() {
   return (
-    <div>
-      <Navbar />
+    <div className="container">
+      <Button>
+        <Link className="login-link" to="/patient/login">
+          Login as patient
+        </Link>
+      </Button>
+      <Button>
+        <Link className="login-link" to="/doctor/login">
+          Login as doctor
+        </Link>
+      </Button>
     </div>
   );
 }

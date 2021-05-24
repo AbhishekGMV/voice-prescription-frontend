@@ -7,12 +7,12 @@ export default function DoctorCard({ doctor }) {
   return (
     <Card style={{ width: "18rem" }}>
       <FontAwesomeIcon className="fa-icon" icon={faUser} />{" "}
-      {/*replace with doctor image*/}
+      {/*replace Font awesome icon with doctor image*/}
       <Card.Body>
         <Card.Title>{doctor.dname}</Card.Title>
         <Card.Text>{doctor.role}</Card.Text>
         <Card.Text>{doctor.demail}</Card.Text>
-        <Button variant="primary">Profile</Button>
+        <Button variant="primary">Consult </Button>
       </Card.Body>
     </Card>
   );
