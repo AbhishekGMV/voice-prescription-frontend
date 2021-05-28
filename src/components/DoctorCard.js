@@ -1,9 +1,27 @@
-import { React } from "react";
+import { React, useState } from "react";
 import { Card, Button } from "react-bootstrap";
+import { Redirect } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
-export default function DoctorCard({ doctor }) {
+export default function DoctorCard({ doctor, match }) {
+  const pid = match.params.id;
+  const [redirect, setRedirect] = useState(false);
+
+  if (redirect) {
+    return (
+      <Redirect
+        to={{
+          pathname: `/patient/${pid}/book-doctor`,
+          state: {
+            pid: pid,
+            doctor: doctor,
+          },
+        }}
+      />
+    );
+  }
+
   return (
     <Card style={{ width: "18rem" }}>
       <FontAwesomeIcon className="fa-icon" icon={faUser} />{" "}
@@ -12,7 +30,9 @@ export default function DoctorCard({ doctor }) {
         <Card.Title>{doctor.dname}</Card.Title>
         <Card.Text>{doctor.role}</Card.Text>
         <Card.Text>{doctor.demail}</Card.Text>
-        <Button variant="primary">Consult </Button>
+        <Button variant="primary" onClick={() => setRedirect(true)}>
+          Consult
+        </Button>
       </Card.Body>
     </Card>
   );

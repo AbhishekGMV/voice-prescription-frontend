@@ -1,9 +1,18 @@
 import React from "react";
 import api from "./../api";
 import { Link } from "react-router-dom";
+import { Dropdown, DropdownButton } from "react-bootstrap";
 import "./../styles/register.css";
 
 export default class PatientRegister extends React.Component {
+  dropDownOptions = [
+    "OPD",
+    "Gynecology",
+    "Neurosurgeon",
+    "Psychiatrist",
+    "Dental",
+  ];
+
   initialState = {
     name: "",
     email: "",
@@ -11,12 +20,18 @@ export default class PatientRegister extends React.Component {
     password: "",
     confirmPassword: "",
     error: false,
+    specialization: null,
+    dropdownError: false,
   };
 
   state = this.initialState;
 
   handleSubmit = (e) => {
     e.preventDefault();
+    if (!this.state.specialization) {
+      this.setState({ dropdownError: true });
+      return;
+    }
     this.setState({ error: false });
     if (this.state.password !== this.state.confirmPassword) {
       this.setState({ error: true });
@@ -27,9 +42,10 @@ export default class PatientRegister extends React.Component {
           email: this.state.email,
           phno: this.state.phoneNumber,
           password: this.state.password,
+          role: this.state.specialization,
         })
         .then((response) => {
-          this.setState({ error: false });
+          this.setState({ dropdownError: false, error: false });
           alert(response.statusText);
         })
         .catch(() => {
@@ -93,6 +109,34 @@ export default class PatientRegister extends React.Component {
                 this.setState({ confirmPassword: e.target.value })
               }
             />
+          </div>
+          <div>
+            <label>Specialization:</label>
+            <DropdownButton
+              onSelect={(value) =>
+                this.setState({ specialization: value, dropdownError: false })
+              }
+              title={
+                this.state.specialization === null
+                  ? "Specialization"
+                  : this.state.specialization
+              }
+            >
+              {this.dropDownOptions.map((title) => {
+                return (
+                  <Dropdown.Item key={title} eventKey={title}>
+                    {title}
+                  </Dropdown.Item>
+                );
+              })}
+            </DropdownButton>
+          </div>
+          <div className="Dropdown-required-error">
+            {this.state.dropdownError ? (
+              <div className="error">Specialization is required</div>
+            ) : (
+              ""
+            )}
           </div>
           <div className="btn-section">
             <input type="submit" className="btn btn-success" />

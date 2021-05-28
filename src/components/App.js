@@ -9,9 +9,10 @@ import PatientDashboard from "./PatientDashboard";
 import ProcessPrescription from "./ProcessPrescription";
 import PatientAppointment from "./PatientAppointment";
 import PageNotFound from "./PageNotFound";
-import Doctor from "./Doctor";
+import Doctor from "./DoctorList";
 import BookingPage from "./BookingPage";
 import BookingSummary from "./BookingSummary";
+import BookDoctor from "./BookDoctor";
 
 function App() {
   return (
@@ -27,7 +28,7 @@ function App() {
             exact
             component={PatientAppointment}
           />
-          <Route path="/doctors" exact component={Doctor} />
+          <Route path="/patient/:id/doctors-list" exact component={Doctor} />
           <Route path="/doctor/login" exact component={DoctorLogin} />
           <Route path="/doctor/register" exact component={DoctorRegister} />
           <Route
@@ -39,6 +40,10 @@ function App() {
           <Route
             path="/patient/:id/booking-summary"
             render={(props) => <BookingSummary {...props} />}
+          />
+          <Route
+            path="/patient/:id/book-doctor"
+            render={(props) => <BookDoctor {...props} />}
           />
           <Route path="/404" component={PageNotFound} />
           <Route component={PageNotFound} />

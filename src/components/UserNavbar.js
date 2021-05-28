@@ -19,7 +19,7 @@ export default function UserNavbar({ userInfo, userRole }) {
             {userRole === "patient" && (
               <>
                 <li className="nav-item">
-                  <Link to="/doctors">Doctors</Link>
+                  <Link to={`/patient/${id}/doctors-list`}>Doctors</Link>
                 </li>
                 <li className="nav-item">
                   <Link to={`/patient/${id}/booking`}>Book an appointment</Link>

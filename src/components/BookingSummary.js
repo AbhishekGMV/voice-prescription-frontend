@@ -1,23 +1,37 @@
 import React, { Component } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import api from "./../api";
 export class BookingSummary extends Component {
-  // {field: "Gynecology", pid: "1", slot: 2}
   state = { doctorInfo: null };
   bookingInfo = this.props.location.state;
+  doctorInfo = this.bookingInfo.doctor;
+  role = this.bookingInfo.field ? this.bookingInfo.field : "";
+  pid = this.bookingInfo.pid;
+  selectedSlot = this.bookingInfo.selectedSlot;
 
   componentDidMount() {
-    api
-      .post("/get-doctor-with-role", {
-        role: this.bookingInfo.field,
-      })
-      .then(({ data }) => this.setState({ doctorInfo: data }));
+    if (this.role.length > 0) {
+      return api
+        .post("/get-doctor-with-role", {
+          role: this.role,
+        })
+        .then(({ data }) => {
+          this.setState({ doctorInfo: data });
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      this.setState({ doctorInfo: this.doctorInfo });
+    }
   }
 
   handleBookingConfirmation() {
     api
       .post("/book-slot", {
-        slotNo: this.bookingInfo.slot,
+        slotNo: this.selectedSlot.slot_no,
         pid: this.bookingInfo.pid,
         did: this.state.doctorInfo.did,
       })
@@ -33,14 +47,33 @@ export class BookingSummary extends Component {
       });
   }
   render() {
-    return (
-      <div className="jumbotron">
-        {/* {this.state.doctorInfo} */}
-        <Button onClick={() => this.handleBookingConfirmation()}>
-          Confirm booking
-        </Button>
-      </div>
-    );
+    <Button onClick={() => this.props.history.goBack()}>
+      <FontAwesomeIcon icon={faArrowAltCircleLeft} />
+      Go Back
+    </Button>;
+    if (this.state.doctorInfo && this.selectedSlot) {
+      return (
+        <div>
+          <Card>
+            <Card.Title>Doctor details</Card.Title>
+            <Card.Text>Name: {this.state.doctorInfo.dname}</Card.Text>
+            <Card.Text>Email: {this.state.doctorInfo.demail}</Card.Text>
+            <Card.Text>Phone: {this.state.doctorInfo.dphno}</Card.Text>
+            <Card.Title>Slot details</Card.Title>
+            <Card.Text>
+              Timings : {this.selectedSlot.start_time} -
+              {this.selectedSlot.end_time}
+            </Card.Text>
+
+            <Button onClick={() => this.handleBookingConfirmation()}>
+              Confirm booking
+            </Button>
+          </Card>
+        </div>
+      );
+    } else {
+      return <h2>No doctors available for selected slot</h2>;
+    }
   }
 }
 

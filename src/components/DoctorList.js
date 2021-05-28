@@ -3,12 +3,12 @@ import { Button, Container, Col, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import DoctorCard from "./DoctorCard";
-import api from "./../api";
+import api from "../api";
 
-export default function Doctor({ history }) {
+export default function Doctor({ history, match }) {
   const [doctors, setDoctors] = useState([]);
   useEffect(() => {
-    api.get("./doctor").then((res) => {
+    api.get("./get-available-doctors").then((res) => {
       setDoctors(res.data);
     });
   }, []);
@@ -23,7 +23,7 @@ export default function Doctor({ history }) {
         <Col>
           <Row>
             {doctors.map((doc) => {
-              return <DoctorCard key={doc.did} doctor={doc} />;
+              return <DoctorCard key={doc.did} match={match} doctor={doc} />;
             })}
           </Row>
         </Col>
