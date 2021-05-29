@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Button, Card } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
-import api from "./../api";
+import api from "./../../api";
 export class BookingSummary extends Component {
   state = { doctorInfo: null };
   bookingInfo = this.props.location.state;

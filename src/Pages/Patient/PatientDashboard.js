@@ -1,8 +1,8 @@
 import { React, useState, useEffect } from "react";
-import api from "./../api";
+import api from "./../../api";
 import moment from "moment";
-import UserNavbar from "./UserNavbar";
-import "./../styles/patient-dashboard.css";
+import UserNavbar from "./../../components/UserNavbar";
+import "./../../styles/patient-dashboard.css";
 // import { Button } from "react-bootstrap";
 
 export default function PatientDashboard({ match, history }) {

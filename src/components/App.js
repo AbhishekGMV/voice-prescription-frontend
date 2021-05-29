@@ -1,18 +1,18 @@
 import React from "react";
-import Homepage from "./Homepage";
+import Homepage from "./../Pages/Homepage";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import PatientLogin from "./PatientLogin";
-import PatientRegister from "./PatientRegister";
-import DoctorLogin from "./DoctorLogin";
-import DoctorRegister from "./DoctorRegister";
-import PatientDashboard from "./PatientDashboard";
-import ProcessPrescription from "./ProcessPrescription";
-import PatientAppointment from "./PatientAppointment";
-import PageNotFound from "./PageNotFound";
-import Doctor from "./DoctorList";
-import BookingPage from "./BookingPage";
-import BookingSummary from "./BookingSummary";
-import BookDoctor from "./BookDoctor";
+import PatientLogin from "./../Pages/Patient/PatientLogin";
+import PatientRegister from "./../Pages/Patient/PatientRegister";
+import DoctorLogin from "./../Pages/Doctor/DoctorLogin";
+import DoctorRegister from "./../Pages/Doctor/DoctorRegister";
+import PatientDashboard from "./../Pages/Patient/PatientDashboard";
+import ProcessPrescription from "./../Pages/Doctor/ProcessPrescription";
+import PatientAppointment from "./../Pages/Patient/PatientAppointment";
+import PageNotFound from "./../components/PageNotFound";
+import Doctor from "./../Pages/Doctor/DoctorList";
+import BookingPage from "./../Pages/Patient/BookingPage";
+import BookingSummary from "./../Pages/Patient/BookingSummary";
+import BookDoctor from "./../Pages/Patient/BookDoctor";
 
 function App() {
   return (

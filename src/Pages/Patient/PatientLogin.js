@@ -1,7 +1,7 @@
 import React from "react";
-import api from "./../api";
+import api from "./../../api";
 import { Link } from "react-router-dom";
-import "./../styles/login.css";
+import "./../../styles/login.css";
 export default class PatientLogin extends React.Component {
   initialState = { phoneNumber: "", password: "", error: false };
   state = this.initialState;

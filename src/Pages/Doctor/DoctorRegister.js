@@ -1,8 +1,8 @@
 import React from "react";
-import api from "./../api";
+import api from "./../../api";
 import { Link } from "react-router-dom";
 import { Dropdown, DropdownButton } from "react-bootstrap";
-import "./../styles/register.css";
+import "./../../styles/register.css";
 
 export default class PatientRegister extends React.Component {
   dropDownOptions = [

@@ -1,8 +1,8 @@
 import { React, useEffect, useState } from "react";
 import moment from "moment";
-import UserNavbar from "./UserNavbar";
-import api from "./../api";
-import "./../styles/appointment-page.css";
+import UserNavbar from "./../../components/UserNavbar";
+import api from "./../../api";
+import "./../../styles/appointment-page.css";
 
 export default function PatientAppointment({ match, history }) {
   const [appointmentInfo, setAppointmentInfo] = useState([]);
