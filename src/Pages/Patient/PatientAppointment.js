@@ -55,7 +55,7 @@ export default function PatientAppointment({ match, history }) {
               <tr className="table-primary">
                 <th>Appointment No</th>
                 <th>Doctor name</th>
-                <th>reason</th>
+                <th>Problem</th>
                 <th>Date</th>
                 <th>Timings</th>
               </tr>

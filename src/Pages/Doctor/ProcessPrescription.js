@@ -1,7 +1,8 @@
 import React from "react";
-import axios from "axios";
-
-// import ReactPlayer from "react-player";
+import api from "./../../api";
+import moment from "moment";
+import { Table, Button } from "react-bootstrap";
+import "./../../styles/prescription-page.css";
 
 export default class ProcessPrescription extends React.Component {
   constructor(props) {
@@ -11,22 +12,26 @@ export default class ProcessPrescription extends React.Component {
       responseText: "",
       loading: false,
       error: false,
+      patientInfo: [],
     };
   }
 
-  onChangeHandler = (event) => {
-    this.setState({
-      selectedFile: event.target.files[0],
-    });
-  };
+  pid = this.props.match.params.id;
+  currentDate = moment();
 
-  handleFileSubmit = (e) => {
+  componentDidMount() {
+    api.get(`/patient/${this.pid}`).then(({ data }) => {
+      this.setState({ patientInfo: data[0] });
+    });
+  }
+
+  handleFileChange = (e) => {
     this.setState({
       loading: true,
     });
     const data = new FormData();
-    data.append("audio", this.state.selectedFile);
-    axios
+    data.append("audio", e.target.files[0]);
+    api
       .post(
         "https://speech-to-text-api-1.herokuapp.com/transcribeAudio",
         data,
@@ -49,9 +54,16 @@ export default class ProcessPrescription extends React.Component {
           error: true,
         });
       });
+    e.target.value = "";
   };
 
-  display() {
+  getAge = () => {
+    const dob = moment(this.state.patientInfo.dob).format("MM/DD/YYYY");
+    const age = moment(dob, "MM/DD/YYYY").fromNow().slice(0, 2);
+    return age;
+  };
+
+  transcribeAudioFile = () => {
     if (this.state.loading) {
       return (
         <div className="d-flex justify-content-center" role="status">
@@ -65,44 +77,73 @@ export default class ProcessPrescription extends React.Component {
           Unable to process request...
         </p>
       );
-    } else {
-      return (
-        <textarea
-          className="form-control"
-          id="exampleFormControlTextarea1"
-          rows="3"
-          defaultValue={this.state.responseText}
-        />
-      );
     }
-  }
+  };
+
+  handleClick = () => {
+    const prescriptionCanvas = document.getElementById("prescription");
+    window
+      .html2pdf()
+      .from(prescriptionCanvas)
+      .saveAs(`${this.state.patientInfo.pname}-prescription`);
+  };
 
   render() {
     return (
-      <div>
-        {/* <ReactPlayer url="https://drive.google.com/file/d/1HB4UaNOGUFxDRpSngshNf5OhViGOaJk-/view?usp=sharing" /> */}
-        <input type="file" onChange={this.onChangeHandler} />
-        <button
-          type="button"
-          className="btn btn-success btn-block"
-          onClick={this.handleFileSubmit}
-        >
-          Upload
-        </button>
-        {this.display()}
+      <div className="main container">
+        <div id="prescription">
+          {this.state.patientInfo && (
+            <div className="patient-info">
+              <div>
+                <strong>
+                  {this.state.patientInfo.pname},&nbsp;
+                  {this.getAge()}/{this.state.patientInfo.gender}
+                </strong>
+              </div>
+              <span className="date">
+                {this.currentDate.format("DD MMM, yy")}
+              </span>
+              <div>Patient ID: {this.state.patientInfo.pid}</div>
+            </div>
+          )}
+          {!this.state.responseText.length && (
+            <input type="file" onChange={this.handleFileChange} />
+          )}
+
+          {this.transcribeAudioFile()}
+          <Table striped bordered hover className="prescription-table">
+            <thead>
+              <tr>
+                <th colSpan="5">
+                  <img
+                    src="/images/prescription-logo.png"
+                    className="logo"
+                    alt="logo"
+                  />
+                </th>
+                <th>Frequency</th>
+                <th>Quantity</th>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td colSpan="4">
+                  <span
+                    contentEditable={true}
+                    suppressContentEditableWarning={true}
+                  >
+                    {this.state.responseText}
+                  </span>
+                </td>
+                <td>1-0-1</td>
+                <td>1</td>
+              </tr>
+            </thead>
+          </Table>
+        </div>
+        <Button className="download-btn" onClick={this.handleClick}>
+          Download pdf
+        </Button>
       </div>
     );
   }
 }
-
-// {
-//   medsname: {
-//     ['med1','med2','med3','med4']
-//  }
-//  timing: {
-//     []
-//  }
-//  diet_exercise: {
-
-//  }
-// }
