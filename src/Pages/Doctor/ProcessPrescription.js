@@ -3,6 +3,7 @@ import api from "./../../api";
 import moment from "moment";
 import { Table, Button } from "react-bootstrap";
 import "./../../styles/prescription-page.css";
+import SpeechRecognitionModule from "../../components/SpeechRecognitionModule";
 
 export default class ProcessPrescription extends React.Component {
   constructor(props) {
@@ -143,6 +144,7 @@ export default class ProcessPrescription extends React.Component {
         <Button className="download-btn" onClick={this.handleClick}>
           Download pdf
         </Button>
+        <SpeechRecognitionModule />
       </div>
     );
   }
