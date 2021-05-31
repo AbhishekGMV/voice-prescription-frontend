@@ -8,6 +8,7 @@ export default class PatientRegister extends React.Component {
     name: "",
     email: "",
     dob: "",
+    gender: "",
     phoneNumber: "",
     password: "",
     confirmPassword: "",
@@ -29,6 +30,7 @@ export default class PatientRegister extends React.Component {
           dob: this.state.dob,
           phno: this.state.phoneNumber,
           password: this.state.password,
+          gender: this.state.gender,
         })
         .then((response) => {
           alert(response.statusText);
@@ -44,7 +46,7 @@ export default class PatientRegister extends React.Component {
       <div>
         <div className="form-control">
           <form onSubmit={this.handleSubmit}>
-            <label>Register</label>
+            <label>Patient Register</label>
             <div className="input-group mb-3">
               <input
                 type="text"
@@ -72,6 +74,34 @@ export default class PatientRegister extends React.Component {
                 required
                 onChange={(e) => this.setState({ dob: e.target.value })}
               />
+            </div>
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="flexRadioDefault"
+                required
+                onChange={(e) => {
+                  this.setState({ gender: e.currentTarget.value });
+                }}
+                checked={this.state.gender === "Male"}
+                value="Male"
+              />
+              <label>Male</label>
+            </div>
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="radio"
+                required
+                name="flexRadioDefault"
+                onChange={(e) => {
+                  this.setState({ gender: e.currentTarget.value });
+                }}
+                value="Female"
+                checked={this.state.gender === "Female"}
+              />
+              <label>Female</label>
             </div>
             <div className="input-group mb-3">
               <input
