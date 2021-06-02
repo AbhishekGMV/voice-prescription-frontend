@@ -40,7 +40,7 @@ export class BookingPage extends Component {
           to={{
             pathname: `/patient/${this.pid}/booking-summary`,
             state: {
-              field: this.state.selectedField,
+              field: this.state.selectedField.toLowerCase(),
               pid: this.pid,
               selectedSlot: this.state.selectedSlot,
             },
@@ -59,7 +59,7 @@ export class BookingPage extends Component {
           <Row>
             {[
               "OPD",
-              "Gynecology",
+              "Gynecologist",
               "Neurosurgeon",
               "Psychiatrist",
               "Dental",

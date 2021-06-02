@@ -14,16 +14,21 @@ export default class ProcessPrescription extends React.Component {
       loading: false,
       error: false,
       patientInfo: [],
+      prescriptionData: [],
     };
   }
-
   pid = this.props.match.params.id;
   currentDate = moment();
 
   componentDidMount() {
-    api.get(`/patient/${this.pid}`).then(({ data }) => {
-      this.setState({ patientInfo: data[0] });
-    });
+    api
+      .get(`/patient/${this.pid}`)
+      .then(({ data }) => {
+        this.setState({ patientInfo: data[0] });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
   handleFileChange = (e) => {
@@ -89,6 +94,15 @@ export default class ProcessPrescription extends React.Component {
       .saveAs(`${this.state.patientInfo.pname}-prescription`);
   };
 
+  addRowData = (medName, frequency, quantity) => {
+    this.setState({
+      prescriptionData: [
+        ...this.state.prescriptionData,
+        { medicine: medName, frequency: frequency, quantity: quantity },
+      ],
+    });
+  };
+
   render() {
     return (
       <div className="main container">
@@ -125,26 +139,38 @@ export default class ProcessPrescription extends React.Component {
                 <th>Frequency</th>
                 <th>Quantity</th>
               </tr>
-              <tr>
-                <td>1</td>
-                <td colSpan="4">
-                  <span
-                    contentEditable={true}
-                    suppressContentEditableWarning={true}
-                  >
-                    {this.state.responseText}
-                  </span>
-                </td>
-                <td>1-0-1</td>
-                <td>1</td>
-              </tr>
+
+              {this.state.prescriptionData &&
+                this.state.prescriptionData.map((data, idx) => {
+                  return (
+                    <tr key={idx}>
+                      <td>{idx + 1}</td>
+                      <td colSpan="4">
+                        <span
+                          contentEditable={true}
+                          suppressContentEditableWarning={true}
+                        >
+                          {data.medicine}
+                        </span>
+                      </td>
+                      <td>{data.frequency}</td>
+                      <td>{data.quantity}</td>
+                    </tr>
+                  );
+                })}
             </thead>
           </Table>
         </div>
         <Button className="download-btn" onClick={this.handleClick}>
           Download pdf
         </Button>
-        <SpeechRecognitionModule />
+        <SpeechRecognitionModule
+          addRowData={this.addRowData}
+          setPrescriptionData={(data) => {
+            this.setState({ data });
+          }}
+          data={this.state.data}
+        />
       </div>
     );
   }

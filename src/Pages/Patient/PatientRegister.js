@@ -32,8 +32,9 @@ export default class PatientRegister extends React.Component {
           password: this.state.password,
           gender: this.state.gender,
         })
-        .then((response) => {
-          alert(response.statusText);
+        .then(({ data }) => {
+          let pid = data[0];
+          this.props.history.push(`/patient/${pid}`);
         })
         .catch(() => {
           this.setState({ error: true });
