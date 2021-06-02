@@ -2,7 +2,7 @@ import { React, useState, useEffect } from "react";
 import { Button, Container, Col, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
-import DoctorCard from "../../components/Doctor/DoctorCard";
+import DoctorCard from "../../components/DoctorCard";
 import api from "../../api";
 
 export default function Doctor({ history, match }) {

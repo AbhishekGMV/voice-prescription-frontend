@@ -16,7 +16,8 @@ export default class DoctorLogin extends React.Component {
         password: this.state.password,
       })
       .then((response) => {
-        console.log(response);
+        const did = response.data.did;
+        this.props.history.push(`/doctor/${did}`);
       })
       .catch(() => {
         this.setState({ error: true });

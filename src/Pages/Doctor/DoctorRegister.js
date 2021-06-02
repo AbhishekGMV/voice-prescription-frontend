@@ -44,9 +44,10 @@ export default class PatientRegister extends React.Component {
           password: this.state.password,
           role: this.state.specialization,
         })
-        .then((response) => {
+        .then(({ data }) => {
           this.setState({ dropdownError: false, error: false });
-          alert(response.statusText);
+          let did = data[0];
+          this.props.history.push(`/doctor/${did}`);
         })
         .catch(() => {
           this.setState({ error: true });
@@ -152,7 +153,7 @@ export default class PatientRegister extends React.Component {
             ""
           )}
           <span>Already have an account? </span>{" "}
-          <Link to="/patient/login">Login here</Link>
+          <Link to="/doctor/login">Login here</Link>
         </form>
       </div>
     );
