@@ -42,7 +42,7 @@ function App() {
           <Route path="/doctor/login" exact component={DoctorLogin} />
           <Route path="/doctor/register" exact component={DoctorRegister} />
           <Route
-            path="/doctor/process-prescription/:id"
+            path="/doctor/:id/process-prescription/:id"
             exact
             component={ProcessPrescription}
           />

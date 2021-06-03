@@ -2,6 +2,7 @@ import React from "react";
 import api from "./../../api";
 import moment from "moment";
 import { Table, Button } from "react-bootstrap";
+import logo from "./../../images/prescription-logo.png";
 import "./../../styles/prescription-page.css";
 import SpeechRecognitionModule from "../../components/SpeechRecognitionModule";
 
@@ -95,6 +96,9 @@ export default class ProcessPrescription extends React.Component {
   };
 
   addRowData = (medName, frequency, quantity) => {
+    if (!medName.length || !frequency.length || !quantity.length) {
+      return alert("Unable to add data");
+    }
     this.setState({
       prescriptionData: [
         ...this.state.prescriptionData,
@@ -130,11 +134,7 @@ export default class ProcessPrescription extends React.Component {
             <thead>
               <tr>
                 <th colSpan="5">
-                  <img
-                    src="/images/prescription-logo.png"
-                    className="logo"
-                    alt="logo"
-                  />
+                  <img src={logo} className="logo" alt="logo" />
                 </th>
                 <th>Frequency</th>
                 <th>Quantity</th>

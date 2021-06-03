@@ -24,3 +24,11 @@
 .download-btn {
   float: right;
 }
+
+.row-input div {
+  padding: 10px;
+}
+
+.row-input {
+  border: 1px solid;
+}
