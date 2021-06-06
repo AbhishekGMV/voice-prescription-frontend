@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
@@ -23,30 +23,23 @@ export default function SpeechRecognitionModule(props) {
       },
       matchInterim: true,
     },
-    {
-      command: ["medicine."],
-      callback: ({ resetTranscript }) => {
-        props.setPrescriptionData("");
-        resetTranscript();
-      },
-      matchInterim: true,
-    },
-    {
-      command: ["End."],
-      callback: ({ resetTranscript }) => {
-        props.setPrescriptionData(transcript);
-        resetTranscript();
-        SpeechRecognition.stopListening();
-      },
-      matchInterim: true,
-    },
   ];
 
   const { transcript, resetTranscript } = useSpeechRecognition({ commands });
 
+  useEffect(() => {
+    if (medName.length && frequency.length && quantity.length) {
+      props.addRowData(medName, frequency, quantity);
+      setMedName("");
+      setFrequency("");
+      setQuantity("");
+    }
+  }, [medName, frequency, quantity, props]);
+
   if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
     return alert("Browser not supported!");
   }
+
   return (
     <div>
       <div className="row-input">

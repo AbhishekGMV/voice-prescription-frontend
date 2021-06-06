@@ -125,9 +125,10 @@ export default class ProcessPrescription extends React.Component {
               <div>Patient ID: {this.state.patientInfo.pid}</div>
             </div>
           )}
-          {!this.state.responseText.length && (
+          {/* {!this.state.responseText.length && (
             <input type="file" onChange={this.handleFileChange} />
-          )}
+          )} */
+          /*Will uncomment this line when starting to work with file upload*/}
 
           {this.transcribeAudioFile()}
           <Table striped bordered hover className="prescription-table">
