@@ -91,7 +91,7 @@ export class BookingPage extends Component {
                     onClick={() =>
                       this.setState({
                         selectedSlot: {
-                          slot: slot.slot_no,
+                          slot_no: slot.slot_no,
                           start_time: slot.slot_start,
                           end_time: slot.slot_end,
                         },
@@ -110,6 +110,9 @@ export class BookingPage extends Component {
               })}
           </Row>
         </Col>
+        {this.state.selectedSlot.slot_no && (
+          <h5>Selected slot: {this.state.selectedSlot.slot_no}</h5>
+        )}
         {Object.keys(this.state.selectedSlot).length > 0 && (
           <>
             <Button

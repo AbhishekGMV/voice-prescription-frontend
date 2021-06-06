@@ -74,6 +74,9 @@ export class BookDoctor extends Component {
               })}
           </Row>
         </Col>
+        {this.state.selectedSlot.slot_no && (
+          <h5>Selected slot: {this.state.selectedSlot.slot_no}</h5>
+        )}
         {this.state.selectedSlot && (
           <>
             <Button
