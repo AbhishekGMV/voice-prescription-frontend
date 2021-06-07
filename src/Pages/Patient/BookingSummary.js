@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import { Button, Card } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
+import { Redirect } from "react-router";
 import api from "./../../api";
 export class BookingSummary extends Component {
-  state = { doctorInfo: null };
+  state = { doctorInfo: null, redirect: false };
   bookingInfo = this.props.location.state;
   doctorInfo = this.bookingInfo.doctor;
   role = this.bookingInfo.field ? this.bookingInfo.field : "";
@@ -38,6 +39,7 @@ export class BookingSummary extends Component {
       .then((res) => {
         if (res.status === 200 && res.statusText === "OK") {
           alert("Booking successful");
+          this.setState({ redirect: true });
         } else {
           alert("Doctors currently available");
         }
@@ -46,7 +48,18 @@ export class BookingSummary extends Component {
         alert("Doctors currently available");
       });
   }
+
   render() {
+    if (this.state.redirect) {
+      return (
+        <Redirect
+          to={{
+            pathname: `/patient/${this.pid}/appointment`,
+          }}
+        />
+      );
+    }
+
     <Button onClick={() => this.props.history.goBack()}>
       <FontAwesomeIcon icon={faArrowAltCircleLeft} />
       Go Back
