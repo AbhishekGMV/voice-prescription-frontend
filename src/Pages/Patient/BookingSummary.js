@@ -72,6 +72,7 @@ export class BookingSummary extends Component {
             <Card.Text>Name: {this.state.doctorInfo.dname}</Card.Text>
             <Card.Text>Email: {this.state.doctorInfo.demail}</Card.Text>
             <Card.Text>Phone: {this.state.doctorInfo.dphno}</Card.Text>
+            <Card.Text>Specialization: {this.state.doctorInfo.role}</Card.Text>
             <Card.Title>Slot details</Card.Title>
             <Card.Text>
               Timings : {this.selectedSlot.start_time} -
