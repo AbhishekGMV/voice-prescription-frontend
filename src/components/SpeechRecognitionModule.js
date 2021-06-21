@@ -108,21 +108,11 @@ export default function SpeechRecognitionModule(props) {
         </div>
         <Button
           onClick={() => {
-            setMedName("");
-            setFrequency("");
-            setQuantity("");
-            props.addRowData(medName, frequency, quantity);
-          }}
-        >
-          Add data
-        </Button>
-        <Button
-          onClick={() => {
             SpeechRecognition.stopListening();
             resetTranscript();
           }}
         >
-          Stop
+          Reset
         </Button>
       </div>
       <p>{transcript}</p>

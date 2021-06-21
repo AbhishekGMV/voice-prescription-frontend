@@ -14,6 +14,7 @@ import DoctorLogin from "./../Pages/Doctor/DoctorLogin";
 import DoctorRegister from "./../Pages/Doctor/DoctorRegister";
 import Doctor from "./../Pages/Doctor/DoctorList";
 import DoctorDashboard from "./../Pages/Doctor/DoctorDashboard";
+import DoctorAppointment from "../Pages/Doctor/DoctorAppointment";
 
 function App() {
   return (
@@ -41,6 +42,11 @@ function App() {
           />
           <Route path="/doctor/login" exact component={DoctorLogin} />
           <Route path="/doctor/register" exact component={DoctorRegister} />
+          <Route
+            path="/doctor/:id/appointment"
+            exact
+            component={DoctorAppointment}
+          />
           <Route
             path="/doctor/:id/process-prescription/:id"
             exact

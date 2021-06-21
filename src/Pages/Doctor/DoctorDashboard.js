@@ -39,7 +39,7 @@ export default function PatientDashboard({ match, history }) {
       <UserNavbar userRole={"doctor"} userInfo={doctorInfo} />
       {consultationInfo.length === 0 ? (
         <div style={{ textAlign: "center", marginTop: "100px" }}>
-          <strong>All your consultation details will appear here</strong>
+          <strong>Patients consultation details will appear here</strong>
         </div>
       ) : (
         <div className="consultation-list">
