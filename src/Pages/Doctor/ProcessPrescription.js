@@ -1,7 +1,7 @@
 import React from "react";
 import api from "./../../api";
 import moment from "moment";
-import { Table, Button } from "react-bootstrap";
+import { Table, Button, Card } from "react-bootstrap";
 import logo from "./../../images/prescription-logo.png";
 import "./../../styles/prescription-page.css";
 import SpeechRecognitionModule from "../../components/SpeechRecognitionModule";
@@ -16,6 +16,8 @@ export default class ProcessPrescription extends React.Component {
       error: false,
       patientInfo: [],
       prescriptionData: [],
+      advice: "",
+      diagnosis: "",
     };
   }
   pid = this.props.match.params.id;
@@ -92,18 +94,41 @@ export default class ProcessPrescription extends React.Component {
     window
       .html2pdf()
       .from(prescriptionCanvas)
-      .saveAs(`${this.state.patientInfo.pname}-prescription`);
+      .saveAs(
+        `${this.state.patientInfo.pname}-${this.state.patientInfo.pid}-prescription`
+      );
   };
 
-  addRowData = (medName, frequency, quantity) => {
-    if (!medName.length || !frequency.length || !quantity.length) {
-      return alert("Unable to add data");
+  addRowData = (medName, frequency, medicineTiming, duration, quantity) => {
+    if (
+      medName.length &&
+      frequency.length &&
+      medicineTiming.length &&
+      duration.length &&
+      quantity.length
+    ) {
+      this.setState({
+        prescriptionData: [
+          ...this.state.prescriptionData,
+          {
+            medicine: medName,
+            frequency: frequency,
+            medicineTiming: medicineTiming,
+            quantity: quantity,
+            duration: duration,
+          },
+        ],
+      });
     }
+  };
+
+  addAdvice = (advice) => {
+    this.setState({ advice: advice });
+  };
+
+  addDiagnosis = (diagnosis) => {
     this.setState({
-      prescriptionData: [
-        ...this.state.prescriptionData,
-        { medicine: medName, frequency: frequency, quantity: quantity },
-      ],
+      diagnosis: diagnosis,
     });
   };
 
@@ -114,23 +139,34 @@ export default class ProcessPrescription extends React.Component {
           {this.state.patientInfo && (
             <div className="patient-info">
               <div>
-                <strong>
-                  {this.state.patientInfo.pname},&nbsp;
-                  {this.getAge()}/{this.state.patientInfo.gender}
-                </strong>
+                <div>
+                  <strong>Name: </strong>
+                  {this.state.patientInfo.pname}
+                </div>
+                <div>
+                  <strong>AGE: </strong> {this.getAge()}
+                </div>
+                <div>
+                  <strong>Gender: </strong> {this.state.patientInfo.gender}
+                </div>
               </div>
               <span className="date">
-                {this.currentDate.format("DD MMM, yy")}
+                <strong>Date: </strong> {this.currentDate.format("DD MMM, yy")}
               </span>
-              <div>Patient ID: {this.state.patientInfo.pid}</div>
+              <div>
+                <strong>PID: </strong>
+                {this.state.patientInfo.pid}
+              </div>
             </div>
           )}
-          {/* {!this.state.responseText.length && (
-            <input type="file" onChange={this.handleFileChange} />
-          )} */
-          /*Will uncomment this line when starting to work with file upload*/}
-
-          {this.transcribeAudioFile()}
+          {/* {this.transcribeAudioFile()} */}
+          {this.state.diagnosis.length ? (
+            <Card.Header>
+              <strong>Diagnosis:</strong> {this.state.diagnosis}
+            </Card.Header>
+          ) : (
+            ""
+          )}
           <Table striped bordered hover className="prescription-table">
             <thead>
               <tr>
@@ -138,35 +174,55 @@ export default class ProcessPrescription extends React.Component {
                   <img src={logo} className="logo" alt="logo" />
                 </th>
                 <th>Frequency</th>
+                <th>Duration</th>
                 <th>Quantity</th>
               </tr>
-
+            </thead>
+            <tbody>
               {this.state.prescriptionData &&
                 this.state.prescriptionData.map((data, idx) => {
                   return (
-                    <tr key={idx}>
-                      <td>{idx + 1}</td>
-                      <td colSpan="4">
-                        <span
-                          contentEditable={true}
-                          suppressContentEditableWarning={true}
-                        >
-                          {data.medicine}
-                        </span>
-                      </td>
-                      <td>{data.frequency}</td>
-                      <td>{data.quantity}</td>
-                    </tr>
+                    <>
+                      <tr key={idx + 1}>
+                        <td>{idx + 1}</td>
+                        <td colSpan="4">
+                          <span
+                            contentEditable={true}
+                            suppressContentEditableWarning={true}
+                          >
+                            {data.medicine}
+                          </span>
+                        </td>
+                        <td>
+                          {data.frequency} - (
+                          <strong> {data.medicineTiming} </strong>)
+                        </td>
+                        <td>{data.duration}</td>
+                        <td>{data.quantity}</td>
+                      </tr>
+                    </>
                   );
                 })}
-            </thead>
+            </tbody>
           </Table>
+          {this.state.advice && (
+            <span>
+              <label>ADVICE: </label>
+              <textarea
+                className="form-control"
+                defaultValue={this.state.advice}
+              />
+            </span>
+          )}
         </div>
         <Button className="download-btn" onClick={this.handleClick}>
           Download pdf
         </Button>
         <SpeechRecognitionModule
           addRowData={this.addRowData}
+          addAdvice={this.addAdvice}
+          addDiagnosis={this.addDiagnosis}
+          diagnosis={this.state.diagnosis}
           setPrescriptionData={(data) => {
             this.setState({ data });
           }}
