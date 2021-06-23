@@ -87,6 +87,99 @@ export default class ProcessPrescription extends React.Component {
     }
   };
 
+  vonagesendSMS = () => {
+
+    const Vonage = require('@vonage/server-sdk')
+
+    const vonage = new Vonage({
+      apiKey: "a8e9ff65",
+      apiSecret: "PuENTMe7vanl96zV"
+    });
+
+    const from = "Vonage APIs"
+    const to = "919483952634"
+    const text = 'A text message sent using the Vonage SMS API'
+
+    vonage.message.sendSms(from, to, text, (err, responseData) => {
+        if (err) {
+            console.log(err);
+        } else {
+            if(responseData.messages[0]['status'] === "0") {
+                console.log("Message sent successfully.");
+            } else {
+                console.log(`Message failed with error: ${responseData.messages[0]['error-text']}`);
+            }
+        }
+    })
+  }
+
+  fast2smssendSMS = () => {
+
+    let prescriptionTable = document.getElementById("prescription");
+    let tableContent = prescriptionTable.innerText.split('\n');
+    let countItems = tableContent.length-1;
+    let smsTextObject = {};
+    let patientPhoneNumber = this.state.patientInfo.pphno;
+
+    for (let i = 4; i <= countItems; i++) {
+      const singleRow = tableContent[i];
+      smsTextObject[i] = singleRow.split('\t');
+    }
+
+    // console.warn(smsTextObject, typeof(patientPhoneNumber), patientPhoneNumber);
+
+
+    var fast2sms = require('fast2sms');
+    var options = {API_KEY:'B9Hy6Fvs3dJUo2cj175PeGOkKEA4TiVNLMWrq0XRhwZl8uCIQYOVePXyYrE6JMbj41iUHvR5owIWsh7x'};
+    fast2sms.init(options);
+    fast2sms.send({ message: 'The SMS content e.g. "This is a message from Fast2SMS"', to: '+916361599901' }).then(function (data) {
+        console.log('data................', data);
+    }).catch(function (error) {
+        console.log('err.................', error);
+    });
+
+  }
+
+  twiliosendSMS = () => {
+    const accountSid = 'AC215b45eb4eda26670a9e4f221311be6e';
+    const authToken = '171e378a55f1952515effffd3bd040ee';
+    
+    //Example Code from NPM.
+    // const result = dotenv.config();
+
+    // if (result.error) {
+    //   throw result.error;
+    // }
+
+    // console.log(result.parsed);
+    //End of Example code from NPM.
+
+
+    // require('dotenv').config({ path: 'C:/Users/Ashish/Desktop/Medipro/voice-prescription-frontend/.env' });
+    // const accountSid = process.env.TWILIO_ACCOUNT_SID;
+    // const authToken = process.env.TWILIO_AUTH_TOKEN;
+
+    console.warn(accountSid, authToken);
+    const client = require('twilio')(accountSid, authToken);
+
+    let prescriptionTable = document.getElementById("prescription");
+    let tableContent = prescriptionTable.innerText.split('\n');
+    let countItems = tableContent.length-1;
+    let smsTextObject = {};
+    let patientPhoneNumber = this.state.patientInfo.pphno;
+
+    for (let i = 4; i <= countItems; i++) {
+      const singleRow = tableContent[i];
+      smsTextObject[i] = singleRow.split('\t');
+    }
+
+    console.warn(smsTextObject, typeof(patientPhoneNumber), patientPhoneNumber);
+    //Construct SMS Body and send.
+
+    client.messages
+      .create({body: 'String(smsTextObject)', from: '+12025178333', to: '+919483952634'})
+      .then(message => console.log(message.sid));
+  }
   handleClick = () => {
     const prescriptionCanvas = document.getElementById("prescription");
     window
@@ -165,6 +258,11 @@ export default class ProcessPrescription extends React.Component {
         <Button className="download-btn" onClick={this.handleClick}>
           Download pdf
         </Button>
+
+        <Button className="sendsms-btn" onClick={this.vonagesendSMS}>
+          Send SMS
+        </Button>
+
         <SpeechRecognitionModule
           addRowData={this.addRowData}
           setPrescriptionData={(data) => {
