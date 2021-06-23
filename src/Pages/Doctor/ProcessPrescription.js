@@ -18,10 +18,13 @@ export default class ProcessPrescription extends React.Component {
       prescriptionData: [],
       advice: "",
       diagnosis: "",
+      digitalSignImg: "",
     };
   }
   pid = this.props.match.params.id;
   currentDate = moment();
+  reader = new FileReader();
+  // url = "";
 
   componentDidMount() {
     api
@@ -132,10 +135,19 @@ export default class ProcessPrescription extends React.Component {
     });
   };
 
+  handleDigitalSignUpload = (digitalSignFile) => {
+    this.reader.readAsDataURL(digitalSignFile);
+    this.reader.onloadend =  () => {
+      this.setState({
+          digitalSignImg: [this.reader.result]
+      })
+    }
+  }
+
   render() {
     return (
       <div className="main container">
-        <div id="prescription">
+        <div style={{padding: "15px", border: "1px solid black"}} id="prescription">
           {this.state.patientInfo && (
             <div className="patient-info">
               <div>
@@ -183,7 +195,7 @@ export default class ProcessPrescription extends React.Component {
                 this.state.prescriptionData.map((data, idx) => {
                   return (
                     <>
-                      <tr key={idx + 1}>
+                      <tr key={idx}>
                         <td>{idx + 1}</td>
                         <td colSpan="4">
                           <span
@@ -194,11 +206,30 @@ export default class ProcessPrescription extends React.Component {
                           </span>
                         </td>
                         <td>
-                          {data.frequency} - (
+                          <span
+                            contentEditable={true}
+                            suppressContentEditableWarning={true}
+                          >
+                            {data.frequency} (
                           <strong> {data.medicineTiming} </strong>)
+                          </span>
                         </td>
-                        <td>{data.duration}</td>
-                        <td>{data.quantity}</td>
+                        <td>
+                          <span
+                            contentEditable={true}
+                            suppressContentEditableWarning={true}
+                          >
+                           {data.duration}
+                          </span>
+                        </td>
+                        <td>
+                          <span
+                            contentEditable={true}
+                            suppressContentEditableWarning={true}
+                          >
+                           {data.quantity}
+                          </span>
+                          </td>
                       </tr>
                     </>
                   );
@@ -214,6 +245,10 @@ export default class ProcessPrescription extends React.Component {
               />
             </span>
           )}
+          {this.state.digitalSignImg && <p>Sign: 
+            <img src={this.state.digitalSignImg} alt="digital sign" width="80px" height="50px" />
+          </p>}
+          
         </div>
         <Button className="download-btn" onClick={this.handleClick}>
           Download pdf
@@ -228,7 +263,13 @@ export default class ProcessPrescription extends React.Component {
           }}
           data={this.state.data}
         />
+        {
+            <>Add signature
+            <input type="file" onChange={(e)=>this.handleDigitalSignUpload(e.target.files[0])}/>
+            </>
+          }
       </div>
+
     );
   }
 }
