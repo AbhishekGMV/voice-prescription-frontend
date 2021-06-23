@@ -3,6 +3,7 @@ import api from "./../../api";
 import moment from "moment";
 import { Table, Button, Card } from "react-bootstrap";
 import logo from "./../../images/prescription-logo.png";
+import d_logo from "./../../images/Logo.jpeg";
 import "./../../styles/prescription-page.css";
 import SpeechRecognitionModule from "../../components/SpeechRecognitionModule";
 
@@ -15,6 +16,7 @@ export default class ProcessPrescription extends React.Component {
       loading: false,
       error: false,
       patientInfo: [],
+      doctorInfo: [],
       prescriptionData: [],
       advice: "",
       diagnosis: "",
@@ -24,6 +26,7 @@ export default class ProcessPrescription extends React.Component {
   pid = this.props.match.params.id;
   currentDate = moment();
   reader = new FileReader();
+  did = this.props.location.pathname.split("/")[2];
   // url = "";
 
   componentDidMount() {
@@ -35,6 +38,9 @@ export default class ProcessPrescription extends React.Component {
       .catch((err) => {
         console.error(err);
       });
+    api.get(`/doctor/${this.did}`).then(({ data }) => {
+      this.setState({ doctorInfo: data[0] });
+    });
   }
 
   handleFileChange = (e) => {
@@ -137,34 +143,63 @@ export default class ProcessPrescription extends React.Component {
 
   handleDigitalSignUpload = (digitalSignFile) => {
     this.reader.readAsDataURL(digitalSignFile);
-    this.reader.onloadend =  () => {
+    this.reader.onloadend = () => {
       this.setState({
-          digitalSignImg: [this.reader.result]
-      })
-    }
-  }
+        digitalSignImg: [this.reader.result],
+      });
+    };
+  };
 
   render() {
     return (
       <div className="main container">
-        <div style={{padding: "15px", border: "1px solid black"}} id="prescription">
+        <div
+          style={{ padding: "15px", border: "1px solid black" }}
+          id="prescription"
+        >
+          <div>
+            <img
+              style={{ float: "right", marginRight: "0" }}
+              src={d_logo}
+              width="200px"
+              height="100px"
+            />
+          </div>
           {this.state.patientInfo && (
             <div className="patient-info">
               <div>
+                <div className="doctor-info">
+                  <div style={{ color: "rgb(7, 70, 143)" }}>
+                    <h4>Dr. {this.state.doctorInfo.dname}</h4>
+                  </div>
+                  <div style={{ textTransform: "capitalize" }}>
+                    <strong>{this.state.doctorInfo.role}</strong>
+                  </div>
+                  <div>
+                    <strong> </strong> {this.state.doctorInfo.demail}
+                  </div>
+                  <div style={{ marginBottom: "20px" }}>
+                    {" "}
+                    <strong> </strong>
+                    {this.state.doctorInfo.dphno}
+                  </div>
+                </div>
                 <div>
                   <strong>Name: </strong>
                   {this.state.patientInfo.pname}
                 </div>
                 <div>
                   <strong>AGE: </strong> {this.getAge()}
+                  <span className="date">
+                    <strong>Date: </strong>{" "}
+                    {this.currentDate.format("DD MMM, yy")}
+                  </span>
                 </div>
                 <div>
                   <strong>Gender: </strong> {this.state.patientInfo.gender}
                 </div>
               </div>
-              <span className="date">
-                <strong>Date: </strong> {this.currentDate.format("DD MMM, yy")}
-              </span>
+
               <div>
                 <strong>PID: </strong>
                 {this.state.patientInfo.pid}
@@ -211,7 +246,7 @@ export default class ProcessPrescription extends React.Component {
                             suppressContentEditableWarning={true}
                           >
                             {data.frequency} (
-                          <strong> {data.medicineTiming} </strong>)
+                            <strong> {data.medicineTiming} </strong>)
                           </span>
                         </td>
                         <td>
@@ -219,7 +254,7 @@ export default class ProcessPrescription extends React.Component {
                             contentEditable={true}
                             suppressContentEditableWarning={true}
                           >
-                           {data.duration}
+                            {data.duration}
                           </span>
                         </td>
                         <td>
@@ -227,9 +262,9 @@ export default class ProcessPrescription extends React.Component {
                             contentEditable={true}
                             suppressContentEditableWarning={true}
                           >
-                           {data.quantity}
+                            {data.quantity}
                           </span>
-                          </td>
+                        </td>
                       </tr>
                     </>
                   );
@@ -245,10 +280,17 @@ export default class ProcessPrescription extends React.Component {
               />
             </span>
           )}
-          {this.state.digitalSignImg && <p>Sign: 
-            <img src={this.state.digitalSignImg} alt="digital sign" width="80px" height="50px" />
-          </p>}
-          
+          {this.state.digitalSignImg && (
+            <p>
+              Sign:
+              <img
+                src={this.state.digitalSignImg}
+                alt="digital sign"
+                width="80px"
+                height="50px"
+              />
+            </p>
+          )}
         </div>
         <Button className="download-btn" onClick={this.handleClick}>
           Download pdf
@@ -264,12 +306,15 @@ export default class ProcessPrescription extends React.Component {
           data={this.state.data}
         />
         {
-            <>Add signature
-            <input type="file" onChange={(e)=>this.handleDigitalSignUpload(e.target.files[0])}/>
-            </>
-          }
+          <>
+            Add signature
+            <input
+              type="file"
+              onChange={(e) => this.handleDigitalSignUpload(e.target.files[0])}
+            />
+          </>
+        }
       </div>
-
     );
   }
 }

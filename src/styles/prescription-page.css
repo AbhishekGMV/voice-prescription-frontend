@@ -13,7 +13,9 @@
 }
 
 .date {
-  float: right;
+  position: relative;
+  margin-left: 75%;
+  margin-top: 0;
 }
 
 .logo {
@@ -32,8 +34,13 @@
 .row-input {
   border: 1px solid;
 }
+.doctor-info {
+  /* background-color: blue;
+  width: 300px; */
+  color: rgb(14, 123, 205);
+}
 
 label {
   width: 80px;
-  display: inline-block
+  display: inline-block;
 }

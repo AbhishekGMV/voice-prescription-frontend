@@ -55,7 +55,7 @@ export default function SpeechRecognitionModule(props) {
       setDuration("");
       setQuantity("");
     }
-    if (advice.length) {
+    if (advice.split(" ").length > 3) {
       props.addAdvice(advice);
       setAdvice("");
     }
@@ -89,21 +89,21 @@ export default function SpeechRecognitionModule(props) {
       }
     });
     return formattedData;
-  }
+  };
 
   const formatFrequency = (frequency) => {
-    let frequencyArr = {"morning":0,"afternoon":0,"night":0}
-    frequency.split(" ").map(word=>{
+    let frequencyArr = { morning: 0, afternoon: 0, night: 0 };
+    frequency.split(" ").map((word) => {
       word = word.toLowerCase();
-      word = word.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g,"");  //removing punctuations
-      word = word.replace(/\s{2,}/g," ")  //removing 2 or more spaces if any
-      if(word in frequencyArr){
-        frequencyArr[word] = 1
+      word = word.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, ""); //removing punctuations
+      word = word.replace(/\s{2,}/g, " "); //removing 2 or more spaces if any
+      if (word in frequencyArr) {
+        frequencyArr[word] = 1;
       }
-  })
-  let formattedData = Object.values(frequencyArr).join("-");
-  return formattedData
-}
+    });
+    let formattedData = Object.values(frequencyArr).join("-");
+    return formattedData;
+  };
 
   return (
     <div>
@@ -113,7 +113,7 @@ export default function SpeechRecognitionModule(props) {
             <>
               <label>Diagnosis: </label>
               <input
-              placeholder= "Ex: Fever"
+                placeholder="Ex: Fever"
                 value={diagnosis}
                 onChange={() => setDiagnosis(transcript)}
                 onMouseEnter={() => {
@@ -139,7 +139,7 @@ export default function SpeechRecognitionModule(props) {
         <div>
           <label>Medicine:</label>
           <input
-              placeholder= "Ex: paracetamol"
+            placeholder="Ex: paracetamol"
             value={medName}
             onChange={() => setMedName(transcript)}
             onMouseEnter={() => {
@@ -162,7 +162,7 @@ export default function SpeechRecognitionModule(props) {
           <div>
             <label>Frequency:</label>
             <input
-              placeholder= "MN-AF-NT"
+              placeholder="MN-AF-NT"
               value={frequency}
               onChange={() => setFrequency(transcript)}
               onMouseEnter={() => {
@@ -187,7 +187,7 @@ export default function SpeechRecognitionModule(props) {
             <div style={{ display: "flex" }}>
               <label>AF/BF: </label>
               <input
-              placeholder= "Ex: Before food"
+                placeholder="Ex: Before food"
                 value={medicineTiming}
                 onChange={() => {
                   setMedicineTiming(transcript);
@@ -216,7 +216,7 @@ export default function SpeechRecognitionModule(props) {
         <div>
           <label>Duration:</label>
           <input
-            placeholder= "'X' day(s)"
+            placeholder="'X' day(s)"
             value={duration}
             onChange={() => setDuration(transcript)}
             onMouseEnter={() => {
@@ -239,7 +239,7 @@ export default function SpeechRecognitionModule(props) {
         <div>
           <label>Quantity: </label>
           <input
-            placeholder= "dosage"
+            placeholder="dosage"
             onChange={() => {
               setQuantity(transcript);
             }}
@@ -255,7 +255,7 @@ export default function SpeechRecognitionModule(props) {
             onMouseLeave={() => {
               setListening({ ...listening, quantity: false });
               SpeechRecognition.stopListening();
-              let formattedQuantity = formatData(transcript);;
+              let formattedQuantity = formatData(transcript);
               setQuantity(formattedQuantity);
             }}
           />
@@ -299,7 +299,7 @@ export default function SpeechRecognitionModule(props) {
           </div>
         )}
       </div>
-      <p>{transcript}</p>
+      {/* <span>{transcript}</span> */}
     </div>
   );
 }
