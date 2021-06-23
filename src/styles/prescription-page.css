@@ -4,7 +4,7 @@
   padding: 30px;
   border: 5px solid rgb(240, 233, 233);
   box-shadow: 10px rgb(206, 158, 158);
-  height: 95vh;
+  height: 100%;
 }
 
 .prescription-table {
@@ -31,4 +31,9 @@
 
 .row-input {
   border: 1px solid;
+}
+
+label {
+  width: 80px;
+  display: inline-block
 }

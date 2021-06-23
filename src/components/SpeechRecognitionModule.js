@@ -42,11 +42,11 @@ export default function SpeechRecognitionModule(props) {
 
   useEffect(() => {
     if (
-      medName.length &&
-      frequency.length &&
-      quantity.length &&
-      duration.length &&
-      medicineTiming.length
+      medName.length > 1 &&
+      frequency.length > 1 &&
+      quantity.length > 1 &&
+      duration.length > 1 &&
+      medicineTiming.length > 1
     ) {
       props.addRowData(medName, frequency, medicineTiming, duration, quantity);
       setMedName("");
@@ -78,6 +78,33 @@ export default function SpeechRecognitionModule(props) {
     return alert("Browser not supported!");
   }
 
+  const formatData = (rawData) => {
+    let formattedData = "";
+    rawData.split(" ").map((word) => {
+      let parsedWord = parseInt(wordsToNumbers(word.toLowerCase()));
+      if (isNaN(parsedWord)) {
+        formattedData += word + " ";
+      } else {
+        formattedData += parsedWord + " ";
+      }
+    });
+    return formattedData;
+  }
+
+  const formatFrequency = (frequency) => {
+    let frequencyArr = {"morning":0,"afternoon":0,"night":0}
+    frequency.split(" ").map(word=>{
+      word = word.toLowerCase();
+      word = word.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g,"");  //removing punctuations
+      word = word.replace(/\s{2,}/g," ")  //removing 2 or more spaces if any
+      if(word in frequencyArr){
+        frequencyArr[word] = 1
+      }
+  })
+  let formattedData = Object.values(frequencyArr).join("-");
+  return formattedData
+}
+
   return (
     <div>
       <div className="row-input">
@@ -86,6 +113,7 @@ export default function SpeechRecognitionModule(props) {
             <>
               <label>Diagnosis: </label>
               <input
+              placeholder= "Ex: Fever"
                 value={diagnosis}
                 onChange={() => setDiagnosis(transcript)}
                 onMouseEnter={() => {
@@ -109,8 +137,9 @@ export default function SpeechRecognitionModule(props) {
           {listening.diagnosis && <span>Listening...</span>}
         </div>
         <div>
-          Medicine:{" "}
+          <label>Medicine:</label>
           <input
+              placeholder= "Ex: paracetamol"
             value={medName}
             onChange={() => setMedName(transcript)}
             onMouseEnter={() => {
@@ -131,8 +160,9 @@ export default function SpeechRecognitionModule(props) {
         </div>
         <span style={{ display: "flex" }}>
           <div>
-            Frequency:{" "}
+            <label>Frequency:</label>
             <input
+              placeholder= "MN-AF-NT"
               value={frequency}
               onChange={() => setFrequency(transcript)}
               onMouseEnter={() => {
@@ -146,16 +176,18 @@ export default function SpeechRecognitionModule(props) {
               onMouseLeave={() => {
                 setListening({ ...listening, frequency: false });
                 SpeechRecognition.stopListening();
-                setFrequency(transcript);
+                let formattedFrequency = formatFrequency(transcript);
+                setFrequency(formattedFrequency);
               }}
             />
             {listening.frequency && <span>Listening...</span>}
           </div>
 
-          {frequency.length ? (
+          {frequency && frequency.length ? (
             <div style={{ display: "flex" }}>
               <label>AF/BF: </label>
               <input
+              placeholder= "Ex: Before food"
                 value={medicineTiming}
                 onChange={() => {
                   setMedicineTiming(transcript);
@@ -182,8 +214,9 @@ export default function SpeechRecognitionModule(props) {
         </span>
 
         <div>
-          Duration:{" "}
+          <label>Duration:</label>
           <input
+            placeholder= "'X' day(s)"
             value={duration}
             onChange={() => setDuration(transcript)}
             onMouseEnter={() => {
@@ -197,14 +230,16 @@ export default function SpeechRecognitionModule(props) {
             onMouseLeave={() => {
               setListening({ ...listening, duration: false });
               SpeechRecognition.stopListening();
-              setDuration(transcript);
+              let formattedDuration = formatData(transcript);
+              setDuration(formattedDuration);
             }}
           />
           {listening.duration && <span>Listening...</span>}
         </div>
         <div>
-          Quantity:{" "}
+          <label>Quantity: </label>
           <input
+            placeholder= "dosage"
             onChange={() => {
               setQuantity(transcript);
             }}
@@ -220,16 +255,8 @@ export default function SpeechRecognitionModule(props) {
             onMouseLeave={() => {
               setListening({ ...listening, quantity: false });
               SpeechRecognition.stopListening();
-              let tempQuantity = "";
-              transcript.split(" ").map((word) => {
-                let parsedWord = parseInt(wordsToNumbers(word.toLowerCase()));
-                if (isNaN(parsedWord)) {
-                  tempQuantity += word + " ";
-                } else {
-                  tempQuantity += parsedWord + " ";
-                }
-              });
-              setQuantity(tempQuantity);
+              let formattedQuantity = formatData(transcript);;
+              setQuantity(formattedQuantity);
             }}
           />
           {listening.quantity && <span>Listening...</span>}
@@ -250,7 +277,7 @@ export default function SpeechRecognitionModule(props) {
         </Button>
         {toggleAdvice && (
           <div>
-            Advice:{" "}
+            <label>Advice:</label>
             <input
               onChange={() => setAdvice(transcript)}
               value={advice}
