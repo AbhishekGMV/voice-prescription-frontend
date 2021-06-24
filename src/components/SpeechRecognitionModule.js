@@ -55,7 +55,7 @@ export default function SpeechRecognitionModule(props) {
       setDuration("");
       setQuantity("");
     }
-    if (advice.split(" ").length > 3) {
+    if (advice.length) {
       props.addAdvice(advice);
       setAdvice("");
     }
@@ -299,7 +299,7 @@ export default function SpeechRecognitionModule(props) {
           </div>
         )}
       </div>
-      {/* <span>{transcript}</span> */}
+      <span>`{transcript}</span>
     </div>
   );
 }
