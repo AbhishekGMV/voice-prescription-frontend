@@ -39,41 +39,12 @@ export default class ProcessPrescription extends React.Component {
         console.error(err);
       });
     api.get(`/doctor/${this.did}`).then(({ data }) => {
-      this.setState({ doctorInfo: data[0] });
+      this.setState({
+        doctorInfo: data[0],
+        digitalSignImg: data[0].signature,
+      });
     });
   }
-
-  handleFileChange = (e) => {
-    this.setState({
-      loading: true,
-    });
-    const data = new FormData();
-    data.append("audio", e.target.files[0]);
-    api
-      .post(
-        "https://speech-to-text-api-1.herokuapp.com/transcribeAudio",
-        data,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
-      .then((res) => {
-        this.setState({
-          loading: false,
-          error: false,
-          responseText: res.data.responseText,
-        });
-      })
-      .catch((err) => {
-        this.setState({
-          loading: false,
-          error: true,
-        });
-      });
-    e.target.value = "";
-  };
 
   getAge = () => {
     const dob = moment(this.state.patientInfo.dob).format("MM/DD/YYYY");
@@ -141,15 +112,6 @@ export default class ProcessPrescription extends React.Component {
     });
   };
 
-  handleDigitalSignUpload = (digitalSignFile) => {
-    this.reader.readAsDataURL(digitalSignFile);
-    this.reader.onloadend = () => {
-      this.setState({
-        digitalSignImg: [this.reader.result],
-      });
-    };
-  };
-
   render() {
     return (
       <div className="main container">
@@ -161,6 +123,7 @@ export default class ProcessPrescription extends React.Component {
             <img
               style={{ float: "right", marginRight: "0" }}
               src={d_logo}
+              alt="banner"
               width="200px"
               height="100px"
             />
@@ -276,7 +239,10 @@ export default class ProcessPrescription extends React.Component {
               <label>ADVICE: </label>
               <textarea
                 className="form-control"
-                defaultValue={this.state.advice}
+                onChange={() => {
+                  this.setState(this.state.advice);
+                }}
+                value={this.state.advice}
               />
             </span>
           )}
@@ -305,15 +271,6 @@ export default class ProcessPrescription extends React.Component {
           }}
           data={this.state.data}
         />
-        {
-          <>
-            Add signature
-            <input
-              type="file"
-              onChange={(e) => this.handleDigitalSignUpload(e.target.files[0])}
-            />
-          </>
-        }
       </div>
     );
   }
