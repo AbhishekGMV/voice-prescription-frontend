@@ -22,6 +22,7 @@ export default class PatientRegister extends React.Component {
     error: false,
     specialization: null,
     dropdownError: false,
+    signFile: new File()
   };
 
   state = this.initialState;
@@ -43,6 +44,7 @@ export default class PatientRegister extends React.Component {
           phno: this.state.phoneNumber,
           password: this.state.password,
           role: this.state.specialization,
+          signFile: this.state.signFile
         })
         .then(({ data }) => {
           this.setState({ dropdownError: false, error: false });
@@ -139,6 +141,21 @@ export default class PatientRegister extends React.Component {
               ""
             )}
           </div>
+
+          <hr />
+          <div class="mb-3">
+          <label for="formFile" class="form-label">Upload Your Signature.</label>
+          <input 
+          class="form-control" 
+          type="file" 
+          id="signFileID"
+          value={this.state.signFile}
+          onChange={(e) =>
+            this.setState({ signFile: e.target.files[0] })
+          }
+          accept="image/x-png,image/gif,image/jpeg" />
+          </div>
+
           <div className="btn-section">
             <input type="submit" className="btn btn-success" />
             <input
