@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 import "./../../styles/register.css";
 
-export default class PatientRegister extends React.Component {
+export default class DoctorRegister extends React.Component {
   dropDownOptions = [
     "General",
     "Gynecology",
@@ -22,9 +22,12 @@ export default class PatientRegister extends React.Component {
     error: false,
     specialization: null,
     dropdownError: false,
+    digitalSign: "",
   };
 
   state = this.initialState;
+
+  formData = new FormData();
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -36,15 +39,16 @@ export default class PatientRegister extends React.Component {
     if (this.state.password !== this.state.confirmPassword) {
       this.setState({ error: true });
     } else {
+      this.formData.append("name", this.state.name);
+      this.formData.append("email", this.state.email);
+      this.formData.append("phno", this.state.phoneNumber);
+      this.formData.append("password", this.state.password);
+      this.formData.append("role", this.state.specialization);
+
       api
-        .post("/doctor/register", {
-          name: this.state.name,
-          email: this.state.email,
-          phno: this.state.phoneNumber,
-          password: this.state.password,
-          role: this.state.specialization,
-        })
+        .post("/doctor/register", this.formData)
         .then(({ data }) => {
+          console.log(this.formData);
           this.setState({ dropdownError: false, error: false });
           let did = data[0];
           this.props.history.push(`/doctor/${did}`);
@@ -53,6 +57,15 @@ export default class PatientRegister extends React.Component {
           this.setState({ error: true });
         });
     }
+  };
+
+  handleDigitalSignUpload = (e) => {
+    let file = e.target.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      this.formData.append("signature", reader.result.toString());
+    };
   };
 
   render() {
@@ -131,6 +144,14 @@ export default class PatientRegister extends React.Component {
                 );
               })}
             </DropdownButton>
+          </div>
+          <div>
+            <label>Add signature</label>
+            <input
+              className="form-control"
+              type="file"
+              onChange={(e) => this.handleDigitalSignUpload(e)}
+            />
           </div>
           <div className="Dropdown-required-error">
             {this.state.dropdownError ? (
