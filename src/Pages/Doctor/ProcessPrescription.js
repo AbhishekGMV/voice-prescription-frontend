@@ -209,7 +209,12 @@ export default class ProcessPrescription extends React.Component {
           {/* {this.transcribeAudioFile()} */}
           {this.state.diagnosis.length ? (
             <Card.Header>
-              <strong>Diagnosis:</strong> {this.state.diagnosis}
+              <strong>Diagnosis:</strong>
+              <span
+              contentEditable={true}
+              suppressContentEditableWarning={true}
+              >{this.state.diagnosis}
+              </span>
             </Card.Header>
           ) : (
             ""
@@ -273,7 +278,7 @@ export default class ProcessPrescription extends React.Component {
           </Table>
           {this.state.advice && (
             <span>
-              <label>ADVICE: </label>
+              <label>ADVICE TO PATIENT: </label>
               <textarea
                 className="form-control"
                 defaultValue={this.state.advice}

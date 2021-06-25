@@ -58,7 +58,7 @@ export class BookingPage extends Component {
         <Col>
           <Row>
             {[
-              "OPD",
+              "General",
               "Gynecologist",
               "Neurosurgeon",
               "Psychiatrist",

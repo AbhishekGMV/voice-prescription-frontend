@@ -43,7 +43,7 @@ export default function PatientDashboard({ match, history }) {
         </div>
       ) : (
         <div className="consultation-list">
-          <table className="table">
+          {/* <table className="table">
             <thead>
               <tr>
                 <th>Consultation No</th>
@@ -61,22 +61,28 @@ export default function PatientDashboard({ match, history }) {
                     <td>{consultation.cid}</td>
                     <td>{consultation.pid}</td>
                     <td>{consultation.pname}</td>
-                    <td>{consultation.cdatetime}</td>
+                    <td>{consultation.cdatetime}</td> */}
+                    
+                    
                     {/* <td>{consultation.pdf}</td>
                     <td>{consultation.audio}</td> */}
 
-                    <td>
+                    {/* <td> */}
+
                       {/* <input type="button" className="btn btn-success btn-sm"> */}
-                      <input
+
+                      {/* <input
                         type="button"
                         className="btn btn-success btn-sm"
                         value="VIEW"
-                      />
+                      /> */}
+
                       {/* </input> */}
-                    </td>
-                    <td>
+
+                    {/* </td>
+                    <td> */}
                       {/* brute force to play files*/}
-                      <a
+                      {/* <a
                         className="btn btn-danger btn-sm"
                         href={consultation.audio}
                       >
@@ -87,7 +93,7 @@ export default function PatientDashboard({ match, history }) {
                 );
               })}
             </tbody>
-          </table>
+          </table> */}
         </div>
       )}
     </div>

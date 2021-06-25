@@ -6,7 +6,7 @@ import "./../../styles/register.css";
 
 export default class PatientRegister extends React.Component {
   dropDownOptions = [
-    "OPD",
+    "General",
     "Gynecology",
     "Neurosurgeon",
     "Psychiatrist",
@@ -58,8 +58,8 @@ export default class PatientRegister extends React.Component {
   render() {
     return (
       <div>
-        <form onSubmit={this.handleSubmit}>
-          <label>Doctor register</label>
+        <form class="form-group" onSubmit={this.handleSubmit}>
+        <div style={{fontfamily: 'Sans-Serif'}}><h4><u>Doctor Register</u></h4></div>
           <div className="input-group mb-3">
             <input
               type="text"

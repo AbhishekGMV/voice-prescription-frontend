@@ -299,7 +299,7 @@ export default function SpeechRecognitionModule(props) {
           </div>
         )}
       </div>
-      {/* <span>{transcript}</span> */}
+      <span>{transcript}.</span>
     </div>
   );
 }

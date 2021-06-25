@@ -44,10 +44,10 @@ export default class PatientRegister extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="outFormControl">
         <div className="form-control">
           <form onSubmit={this.handleSubmit}>
-            <label>Patient Register</label>
+          <div style={{marginBottom: '10%', fontfamily: 'Sans-Serif'}}><h4><u>Patient Register</u></h4></div>
             <div className="input-group mb-3">
               <input
                 type="text"

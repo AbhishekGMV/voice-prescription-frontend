@@ -27,10 +27,13 @@ export default class PatientLogin extends React.Component {
   render() {
     return (
       <div>
-        <div></div>
-        <div className="form-group">
+        <div className="split leftt">
+          
+        </div>
+        
+        <div className="form-group split right">
+        <div style={{fontfamily: 'Sans-Serif'}}><h4><u>Patient login</u></h4></div>
           <form onSubmit={this.handleSubmit}>
-            <label>Patient login</label>
             <div className="input-group mb-3">
               <input
                 type="text"
@@ -64,7 +67,7 @@ export default class PatientLogin extends React.Component {
             ) : (
               ""
             )}
-            <span>Don't have an account? </span>
+            <span><b>Don't have an account?</b></span>
             <Link to="/patient/register">Register here</Link>
           </form>
         </div>

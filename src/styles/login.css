@@ -12,3 +12,53 @@
   grid-template-columns: 2fr 2fr;
   /* grid-template-rows: 600px; */
 }
+
+.form-group {
+  background: white;
+  border: 1px solid #dedede;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin: 0 auto;
+  margin-top: 90px;
+  max-width: 500px;
+  padding: 100px 50px;
+  text-align: center;
+}
+
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+/* Control the left side */
+.left {
+  left: 0;
+  background-image: url(./../images/doc.jpeg);
+  background-position: bottom;
+  background-attachment: initial;
+
+}
+
+.leftt{
+  left: 0;
+  background-image: url(./../images/patient.jpeg);
+  background-size: cover;
+
+}
+
+.right {
+  right: 0;
+  position: absolute;
+  position: absolute;
+  top: 50%;
+  left: 75%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  background-color:whitesmoke;
+}

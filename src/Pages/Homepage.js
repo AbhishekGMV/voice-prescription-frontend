@@ -5,6 +5,7 @@ import "./../styles/homepage.css";
 
 export default function Homepage() {
   return (
+    <center>
     <div className="container">
       <Button>
         <Link className="login-link" to="/patient/login">
@@ -17,5 +18,6 @@ export default function Homepage() {
         </Link>
       </Button>
     </div>
+    </center>
   );
 }
