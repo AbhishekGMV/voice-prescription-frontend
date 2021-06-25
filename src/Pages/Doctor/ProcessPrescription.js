@@ -242,13 +242,19 @@ export default class ProcessPrescription extends React.Component {
           {this.state.advice && (
             <span>
               <label>ADVICE TO PATIENT: </label>
-              <textarea
+              {/* <textarea
                 className="form-control"
                 onChange={() => {
                   this.setState(this.state.advice);
                 }}
                 value={this.state.advice}
-              />
+              /> */}
+              <textarea class="form-control"
+                  contentEditable={true}
+                  suppressContentEditableWarning={true}
+                  >
+                    {this.state.advice}
+              </textarea>
             </span>
           )}
           {this.state.digitalSignImg && (
