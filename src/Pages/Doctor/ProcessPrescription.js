@@ -6,6 +6,7 @@ import logo from "./../../images/prescription-logo.png";
 import d_logo from "./../../images/Logo.jpeg";
 import "./../../styles/prescription-page.css";
 import SpeechRecognitionModule from "../../components/SpeechRecognitionModule";
+import html2canvas from "html2canvas";
 
 export default class ProcessPrescription extends React.Component {
   constructor(props) {
@@ -21,13 +22,13 @@ export default class ProcessPrescription extends React.Component {
       advice: "",
       diagnosis: "",
       digitalSignImg: "",
+      toggleBtn: false,
     };
   }
   pid = this.props.match.params.id;
   currentDate = moment();
-  reader = new FileReader();
   did = this.props.location.pathname.split("/")[2];
-  // url = "";
+  // formData = new FormData();
 
   componentDidMount() {
     api
@@ -52,31 +53,83 @@ export default class ProcessPrescription extends React.Component {
     return age;
   };
 
-  transcribeAudioFile = () => {
-    if (this.state.loading) {
-      return (
-        <div className="d-flex justify-content-center" role="status">
-          <div className="spinner-border" role="status"></div>
-          <span className="sr-only">Processing prescription...</span>
-        </div>
-      );
-    } else if (this.state.error) {
-      return (
-        <p className="error" style={{ color: "red" }}>
-          Unable to process request...
-        </p>
-      );
-    }
+  // transcribeAudioFile = () => {
+  //   if (this.state.loading) {
+  //     return (
+  //       <div className="d-flex justify-content-center" role="status">
+  //         <div className="spinner-border" role="status"></div>
+  //         <span className="sr-only">Processing prescription...</span>
+  //       </div>
+  //     );
+  //   } else if (this.state.error) {
+  //     return (
+  //       <p className="error" style={{ color: "red" }}>
+  //         Unable to process request...
+  //       </p>
+  //     );
+  //   }
+  // };
+
+  getFrequency = (frequency) => {
+    let formattedFrequency = "";
+    let rawFrequency = frequency.split("-");
+    formattedFrequency += rawFrequency[0] === "1" ? "morning," : "";
+    formattedFrequency += rawFrequency[1] === "1" ? " afternoon," : "";
+    formattedFrequency += rawFrequency[2] === "1" ? " and evening" : "";
+    return formattedFrequency;
   };
 
-  handleClick = () => {
+  processPrescriptionAudio = () => {
+    // Diagnising for {diagnosis}
+    // take {quantity} of {medicine} at {frequency} for {duration}
+    // {advice}
+    let speechData = {
+      diagnosis: this.state.diagnosis,
+      medicineData: [],
+      advice: this.state.advice,
+    };
+    this.state.prescriptionData.map((row) => {
+      //{medicine: "Crocin", frequency: "1-0-0", medicineTiming: "After food.", quantity: "1 tablet. ", duration: "3 days. "}
+      let rowSpeechData = `Take ${row.quantity} of ${
+        row.medicine
+      } at ${this.getFrequency(row.frequency)} ${row.medicineTiming} for ${
+        row.duration
+      }`;
+      rowSpeechData = rowSpeechData.replace(/[.]/g, "");
+      return speechData.medicineData.push(rowSpeechData);
+    });
+    return speechData;
+  };
+
+  handleSubmit = () => {
+    let speechData = this.processPrescriptionAudio();
+    const postData = {
+      audio: speechData,
+      did: this.did,
+      pid: this.pid,
+      cdatetime: moment().format("YYYY-MM-DD hh:mm:ss"),
+    };
     const prescriptionCanvas = document.getElementById("prescription");
-    window
-      .html2pdf()
-      .from(prescriptionCanvas)
-      .saveAs(
-        `${this.state.patientInfo.pname}-${this.state.patientInfo.pid}-prescription`
-      );
+    html2canvas(prescriptionCanvas, { scrollY: -window.scrollY }).then(
+      (data) => {
+        postData["pdf"] = data.toDataURL();
+        api
+          .post("/consultation", postData)
+          .then(({ data }) => {
+            alert("success");
+          })
+          .catch(() => {
+            alert("error");
+          });
+      }
+    );
+
+    // window
+    //   .html2pdf()
+    //   .from(prescriptionCanvas)
+    //   .saveAs(
+    //     `${this.state.patientInfo.pname}-${this.state.patientInfo.pid}-prescription`
+    //   );
   };
 
   addRowData = (medName, frequency, medicineTiming, duration, quantity) => {
@@ -172,11 +225,12 @@ export default class ProcessPrescription extends React.Component {
           {/* {this.transcribeAudioFile()} */}
           {this.state.diagnosis.length ? (
             <Card.Header>
-              <strong>Diagnosis:</strong>
+              <strong>Diagnosis: </strong>
               <span
-              contentEditable={true}
-              suppressContentEditableWarning={true}
-              >{this.state.diagnosis}
+                contentEditable={true}
+                suppressContentEditableWarning={true}
+              >
+                {this.state.diagnosis}
               </span>
             </Card.Header>
           ) : (
@@ -249,15 +303,16 @@ export default class ProcessPrescription extends React.Component {
                 }}
                 value={this.state.advice}
               /> */}
-              <textarea class="form-control"
-                  contentEditable={true}
-                  suppressContentEditableWarning={true}
-                  >
-                    {this.state.advice}
+              <textarea
+                class="form-control"
+                contentEditable={true}
+                suppressContentEditableWarning={true}
+              >
+                {this.state.advice}
               </textarea>
             </span>
           )}
-          {this.state.digitalSignImg && (
+          {this.state.digitalSignImg && this.state.toggleBtn ? (
             <p>
               Sign:
               <img
@@ -267,10 +322,22 @@ export default class ProcessPrescription extends React.Component {
                 height="50px"
               />
             </p>
+          ) : (
+            ""
           )}
         </div>
-        <Button className="download-btn" onClick={this.handleClick}>
-          Download pdf
+        <Button className="download-btn" onClick={this.handleSubmit}>
+          Save
+        </Button>
+        <Button
+          className={
+            this.state.toggleBtn
+              ? "btn download-btn btn-danger"
+              : "btn download-btn btn-success"
+          }
+          onClick={() => this.setState({ toggleBtn: !this.state.toggleBtn })}
+        >
+          {this.state.toggleBtn ? "Remove signature" : "Add signature"}
         </Button>
         <SpeechRecognitionModule
           addRowData={this.addRowData}

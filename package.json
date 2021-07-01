@@ -12,6 +12,7 @@
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.1",
     "font-awesome": "^4.7.0",
+    "html2canvas": "^1.0.0-rc.7",
     "moment": "^2.29.1",
     "multer": "^1.4.2",
     "react": "^17.0.2",
