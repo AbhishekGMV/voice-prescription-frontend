@@ -48,7 +48,6 @@ export default class DoctorRegister extends React.Component {
       api
         .post("/doctor/register", this.formData)
         .then(({ data }) => {
-          console.log(this.formData);
           this.setState({ dropdownError: false, error: false });
           let did = data[0];
           this.props.history.push(`/doctor/${did}`);
@@ -71,8 +70,12 @@ export default class DoctorRegister extends React.Component {
   render() {
     return (
       <div>
-        <form class="form-group" onSubmit={this.handleSubmit}>
-        <div style={{fontfamily: 'Sans-Serif'}}><h4><u>Doctor Register</u></h4></div>
+        <form className="form-group" onSubmit={this.handleSubmit}>
+          <div style={{ fontfamily: "Sans-Serif" }}>
+            <h4>
+              <u>Doctor Register</u>
+            </h4>
+          </div>
           <div className="input-group mb-3">
             <input
               type="text"

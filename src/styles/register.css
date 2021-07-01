@@ -1,9 +1,9 @@
 .btn {
   margin: 10px;
 }
-.btn-section {
-  margin-left: 40%;
-}
+/* .btn-section {
+  margin-left: 10%;
+} */
 
 .error {
   color: red;
@@ -19,7 +19,7 @@
   margin-top: 90px;
   max-width: 500px;
   padding: 100px 50px;
-  text-align: center; 
+  text-align: center;
 }
 
 /* .form-control {
@@ -32,18 +32,18 @@
   margin-top: 50px;
   max-width: 500px;
   /* padding: 20px 20px; */
-  /* text-align: center; */
+/* text-align: center; */
 /* } */
 
-.outFormControl{
-    background: white;
-    border: 1px solid #dedede;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    margin: 0 auto;
-    margin-top: 90px;
-    max-width: 500px;
-    padding: 100px 50px;
-    text-align: center;
+.outFormControl {
+  background: white;
+  border: 1px solid #dedede;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin: 0 auto;
+  margin-top: 90px;
+  max-width: 500px;
+  padding: 100px 50px;
+  text-align: center;
 }
