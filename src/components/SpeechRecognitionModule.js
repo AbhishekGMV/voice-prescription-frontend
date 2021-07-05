@@ -78,6 +78,10 @@ export default function SpeechRecognitionModule(props) {
     return alert("Browser not supported!");
   }
 
+  // SpeechRecognition.onaudiostart = () => {
+  //   console.log("start");
+  // };
+
   const formatData = (rawData) => {
     let formattedData = "";
     rawData.split(" ").map((word) => {

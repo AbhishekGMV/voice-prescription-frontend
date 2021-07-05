@@ -15,10 +15,12 @@ import DoctorRegister from "./../Pages/Doctor/DoctorRegister";
 import Doctor from "./../Pages/Doctor/DoctorList";
 import DoctorDashboard from "./../Pages/Doctor/DoctorDashboard";
 import DoctorAppointment from "../Pages/Doctor/DoctorAppointment";
+// import AudioInput from "./AudioInput";
 
 function App() {
   return (
     <div>
+      {/* <AudioInput /> */}
       <BrowserRouter>
         <Switch>
           <Route path="/" exact component={Homepage} />
