@@ -3,6 +3,16 @@ import api from "./../../api";
 import moment from "moment";
 import UserNavbar from "./../../components/UserNavbar";
 import "./../../styles/patient-dashboard.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faDownload,
+  faPause,
+  faStopCircle,
+  faPlayCircle,
+  faStepForward,
+} from "@fortawesome/free-solid-svg-icons";
+
 // import { Button } from "react-bootstrap";
 
 export default function PatientDashboard({ match, history }) {
@@ -33,6 +43,35 @@ export default function PatientDashboard({ match, history }) {
     });
   }, [pid, history]);
 
+  const viewPrescription = (dataUrl) => {
+    let image = new Image();
+    image.src = dataUrl;
+    let w = window.open("");
+    w.document.write(image.outerHTML);
+    w.document.close();
+  };
+
+  const downloadPrescription = (dataUrl) => {
+    let image = new Image();
+    image.src = dataUrl;
+    image.width = "800";
+    window
+      .html2pdf()
+      .from(image)
+      .saveAs(`${patientInfo.name}-${patientInfo.id}-prescription`);
+  };
+
+  const playPrescriptionAudio = (prescriptionData) => {
+    let msg = new SpeechSynthesisUtterance();
+    msg.voiceURI = "native";
+    msg.volume = 1;
+    msg.rate = 1;
+    msg.pitch = 2;
+    msg.text = prescriptionData;
+    msg.lang = "en-IN";
+    speechSynthesis.speak(msg);
+  };
+
   return (
     <div>
       <UserNavbar userRole={"patient"} userInfo={patientInfo} />
@@ -48,8 +87,9 @@ export default function PatientDashboard({ match, history }) {
                 <th>Consultation No</th>
                 <th>Doctor name</th>
                 <th>Date & time</th>
-                <th>PDF</th>
-                <th>Audio file</th>
+                <th>View</th>
+                <th>Download</th>
+                <th colSpan="4">Audio</th>
               </tr>
             </thead>
             <tbody>
@@ -60,22 +100,69 @@ export default function PatientDashboard({ match, history }) {
                     <td>{consultation.dname}</td>
                     <td>{consultation.cdatetime}</td>
                     <td>
-                      {/* <input type="button" className="btn btn-success btn-sm"> */}
-                      <input
+                      <button
                         type="button"
-                        className="btn btn-success btn-sm"
-                        value="VIEW"
-                      />
-                      {/* </input> */}
+                        className="btn btn-primary btn-sm"
+                        onClick={() => viewPrescription(consultation.pdf)}
+                      >
+                        <FontAwesomeIcon icon={faEye} />
+                      </button>
                     </td>
                     <td>
-                      {/* brute force to play files*/}
-                      <a
-                        className="btn btn-danger btn-sm"
-                        href={consultation.audio}
+                      <button
+                        type="button"
+                        className="btn btn-success btn-sm"
+                        onClick={() => downloadPrescription(consultation.pdf)}
                       >
-                        LISTEN
-                      </a>
+                        <FontAwesomeIcon icon={faDownload} />
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="Play"
+                        className="btn btn-success btn-sm"
+                        onClick={() => {
+                          playPrescriptionAudio(consultation.audio);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faPlayCircle} />
+                      </button>
+
+                      <button
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="Pause"
+                        className="btn btn-warning btn-sm"
+                        onClick={() => {
+                          window.speechSynthesis.pause();
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faPause} />
+                      </button>
+                      <button
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="Resume"
+                        className="btn btn-secondary btn-sm"
+                        onClick={() => {
+                          window.speechSynthesis.resume();
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faStepForward} />
+                      </button>
+                      <button
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="Stop"
+                        className="btn btn-danger btn-sm"
+                        onClick={() => {
+                          window.speechSynthesis.cancel();
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faStopCircle} />
+                      </button>
                     </td>
                   </tr>
                 );
