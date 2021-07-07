@@ -9,7 +9,7 @@ export default function DoctorAppointment(props) {
   const did = props.match.params.id;
   const [appointmentList, setAppointmentList] = useState([]);
   const [doctorInfo, setDoctorInfo] = useState([]);
-  const [path, setPath] = useState("");
+  const [path, setPath] = useState({ location: "", bid: "", slot_no: "" });
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
@@ -43,7 +43,8 @@ export default function DoctorAppointment(props) {
     return (
       <Redirect
         to={{
-          pathname: path,
+          pathname: path.location,
+          state: { bid: path.bid, slot_no: path.slot_no },
         }}
       />
     );
@@ -54,7 +55,7 @@ export default function DoctorAppointment(props) {
       <UserNavbar userRole="doctor" userInfo={doctorInfo} />
       {appointmentList.length === 0 ? (
         <div style={{ textAlign: "center", marginTop: "100px" }}>
-          <strong>All your consultation details will appear here</strong>
+          <strong>All your appointment details will appear here</strong>
         </div>
       ) : (
         <div className="consultation-list">
@@ -83,9 +84,11 @@ export default function DoctorAppointment(props) {
                     <td>
                       <Button
                         onClick={() => {
-                          setPath(
-                            `/doctor/${did}/process-prescription/${appointment.pid}`
-                          );
+                          setPath({
+                            location: `/doctor/${did}/process-prescription/${appointment.pid}`,
+                            bid: appointment.bid,
+                            slot_no: appointment.slot_no,
+                          });
                           setRedirect(true);
                         }}
                       >

@@ -28,7 +28,8 @@ export default class ProcessPrescription extends React.Component {
   pid = this.props.match.params.id;
   currentDate = moment();
   did = this.props.location.pathname.split("/")[2];
-  // formData = new FormData();
+  bid = this.props.location.state.bid;
+  slot_no = this.props.location.state.slot_no;
 
   componentDidMount() {
     api
@@ -53,23 +54,6 @@ export default class ProcessPrescription extends React.Component {
     return age;
   };
 
-  // transcribeAudioFile = () => {
-  //   if (this.state.loading) {
-  //     return (
-  //       <div className="d-flex justify-content-center" role="status">
-  //         <div className="spinner-border" role="status"></div>
-  //         <span className="sr-only">Processing prescription...</span>
-  //       </div>
-  //     );
-  //   } else if (this.state.error) {
-  //     return (
-  //       <p className="error" style={{ color: "red" }}>
-  //         Unable to process request...
-  //       </p>
-  //     );
-  //   }
-  // };
-
   getFrequency = (frequency) => {
     let formattedFrequency = "";
     let rawFrequency = frequency.split("-");
@@ -80,7 +64,7 @@ export default class ProcessPrescription extends React.Component {
   };
 
   processPrescriptionAudio = () => {
-    // Diagnising for {diagnosis}
+    // Diagnosing for {diagnosis}
     // take {quantity} of {medicine} at {frequency} for {duration}
     // {advice}
     let speechData = {
@@ -108,6 +92,7 @@ export default class ProcessPrescription extends React.Component {
       did: this.did,
       pid: this.pid,
       cdatetime: moment().format("YYYY-MM-DD hh:mm:ss"),
+      bid: this.bid,
     };
     const prescriptionCanvas = document.getElementById("prescription");
     html2canvas(prescriptionCanvas, { scrollY: -window.scrollY }).then(
@@ -115,21 +100,28 @@ export default class ProcessPrescription extends React.Component {
         postData["pdf"] = data.toDataURL();
         api
           .post("/consultation", postData)
-          .then(({ data }) => {
-            alert("success");
+          .then(() => {
+            api
+              .post("/appointment/cancel", {
+                bid: this.bid,
+                did: this.did,
+                slotNo: this.slot_no,
+              })
+              .then(() => {
+                alert("Prescription generated!");
+                this.props.history.push(`/doctor/${this.did}`);
+              })
+              .catch((err) => {
+                console.error(err);
+                alert("error");
+              });
           })
-          .catch(() => {
+          .catch((err) => {
+            console.error(err);
             alert("error");
           });
       }
     );
-
-    // window
-    //   .html2pdf()
-    //   .from(prescriptionCanvas)
-    //   .saveAs(
-    //     `${this.state.patientInfo.pname}-${this.state.patientInfo.pid}-prescription`
-    //   );
   };
 
   addRowData = (medName, frequency, medicineTiming, duration, quantity) => {
@@ -222,7 +214,6 @@ export default class ProcessPrescription extends React.Component {
               </div>
             </div>
           )}
-          {/* {this.transcribeAudioFile()} */}
           {this.state.diagnosis.length ? (
             <Card.Header>
               <strong>Diagnosis: </strong>
@@ -295,14 +286,7 @@ export default class ProcessPrescription extends React.Component {
           </Table>
           {this.state.advice && (
             <span>
-              <label>ADVICE TO PATIENT: </label>
-              {/* <textarea
-                className="form-control"
-                onChange={() => {
-                  this.setState(this.state.advice);
-                }}
-                value={this.state.advice}
-              /> */}
+              ADVICE TO PATIENT:
               <textarea
                 class="form-control"
                 contentEditable={true}
