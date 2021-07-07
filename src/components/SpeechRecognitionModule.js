@@ -91,6 +91,7 @@ export default function SpeechRecognitionModule(props) {
       } else {
         formattedData += parsedWord + " ";
       }
+      return word;
     });
     return formattedData;
   };
@@ -104,6 +105,7 @@ export default function SpeechRecognitionModule(props) {
       if (word in frequencyArr) {
         frequencyArr[word] = 1;
       }
+      return word;
     });
     let formattedData = Object.values(frequencyArr).join("-");
     return formattedData;
