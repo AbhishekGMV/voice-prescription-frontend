@@ -15,6 +15,7 @@ import DoctorRegister from "./../Pages/Doctor/DoctorRegister";
 import Doctor from "./../Pages/Doctor/DoctorList";
 import DoctorDashboard from "./../Pages/Doctor/DoctorDashboard";
 import DoctorAppointment from "../Pages/Doctor/DoctorAppointment";
+import AddPatient from "../Pages/Doctor/AddPatient";
 // import AudioInput from "./AudioInput";
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
             exact
             component={DoctorAppointment}
           />
+          <Route path="/doctor/:id/add-patient" exact component={AddPatient} />
           <Route
             path="/doctor/:id/process-prescription/:id"
             exact

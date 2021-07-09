@@ -26,6 +26,13 @@ export default function UserNavbar({ userInfo, userRole }) {
                 </li>
               </>
             )}
+            {userRole === "doctor" && (
+              <>
+                <li className="nav-item">
+                  <Link to={`/doctor/${id}/add-patient`}>Add Patient</Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
         <span className="user-info">
