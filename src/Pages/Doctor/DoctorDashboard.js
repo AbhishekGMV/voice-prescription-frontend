@@ -49,14 +49,14 @@ export default function DoctorDashboard({ match, history }) {
     w.document.close();
   };
 
-  const downloadPrescription = (dataUrl) => {
+  const downloadPrescription = (dataUrl, name) => {
     let image = new Image();
     image.src = dataUrl;
     image.width = "800";
     window
       .html2pdf()
       .from(image)
-      .saveAs(`${doctorInfo.name}-${doctorInfo.id}-prescription`);
+      .saveAs(`${name}-${doctorInfo.id}-prescription`);
   };
 
   const playPrescriptionAudio = (prescriptionData) => {
@@ -110,7 +110,12 @@ export default function DoctorDashboard({ match, history }) {
                       <button
                         type="button"
                         className="btn btn-success btn-sm"
-                        onClick={() => downloadPrescription(consultation.pdf)}
+                        onClick={() =>
+                          downloadPrescription(
+                            consultation.pdf,
+                            consultation.pname
+                          )
+                        }
                       >
                         <FontAwesomeIcon icon={faDownload} />
                       </button>
