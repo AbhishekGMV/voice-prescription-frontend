@@ -79,9 +79,10 @@ export class BookingPage extends Component {
                 </Card>
               );
             })}
+          
 
             {this.state.showTiming && (
-              <h5>Available slots for {this.state.selectedField}</h5>
+              <center><h4 style={{paddingTop:"40px"}}>Available slots for {this.state.selectedField}</h4></center>
             )}
             {this.state.showTiming &&
               this.state.slots.map((slot) => {
@@ -111,10 +112,11 @@ export class BookingPage extends Component {
           </Row>
         </Col>
         {this.state.selectedSlot.slot_no && (
-          <h5>Selected slot: {this.state.selectedSlot.slot_no}</h5>
+          <center><h4 style={{paddingTop:"40px"}}>Selected slot: {this.state.selectedSlot.slot_no}</h4></center>
         )}
         {Object.keys(this.state.selectedSlot).length > 0 && (
           <>
+          <center>
             <Button
               variant="primary"
               onClick={() => this.setState({ redirect: true })}
@@ -127,8 +129,9 @@ export class BookingPage extends Component {
                 this.setState({ selectedSlot: {}, selectedField: null })
               }
             >
-              reset
+              Reset
             </Button>
+            </center>
           </>
         )}
       </div>

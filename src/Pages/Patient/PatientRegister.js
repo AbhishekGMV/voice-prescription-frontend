@@ -44,10 +44,12 @@ export default class PatientRegister extends React.Component {
 
   render() {
     return (
+      <div className="pic">
       <div className="outFormControl">
-        <div className="form-control">
+        <div style={{marginBottom: '10%', fontfamily: 'Sans-Serif'}}><h2>Patient Register</h2></div><br></br>
+        {}
           <form onSubmit={this.handleSubmit}>
-          <div style={{marginBottom: '10%', fontfamily: 'Sans-Serif'}}><h4><u>Patient Register</u></h4></div>
+          
             <div className="input-group mb-3">
               <input
                 type="text"
@@ -153,7 +155,8 @@ export default class PatientRegister extends React.Component {
             <Link to="/patient/login">Login here</Link>
           </form>
         </div>
-      </div>
+        </div>
+      
     );
   }
 }

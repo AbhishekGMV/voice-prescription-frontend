@@ -4,6 +4,31 @@
   color: white;
 }
 
+    
+.backk{
+  background-image: url("../images/backgroundblur.jpg");
+  height: 753px;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+} 
+
+.flexx{
+  display: flex;
+  padding-top: 140px;
+  padding-left: 150px;
+}
+
+.rand{
+    background-color: white;
+    color: black;
+    border : 2px solid #008CBA; /* Green */
+    font-size: 30px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+  }
+
+  
+
 /* .container{
   text-align: center;
   margin-top: 310px;

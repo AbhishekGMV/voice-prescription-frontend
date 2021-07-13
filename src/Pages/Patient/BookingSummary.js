@@ -66,14 +66,14 @@ export class BookingSummary extends Component {
     </Button>;
     if (this.state.doctorInfo && this.selectedSlot) {
       return (
-        <div>
+        <div className="rand2">
           <Card>
-            <Card.Title>Doctor details</Card.Title>
+            <Card.Title><h3>Doctor details</h3></Card.Title>
             <Card.Text>Name: {this.state.doctorInfo.dname}</Card.Text>
             <Card.Text>Email: {this.state.doctorInfo.demail}</Card.Text>
             <Card.Text>Phone: {this.state.doctorInfo.dphno}</Card.Text>
             <Card.Text>Specialization: {this.state.doctorInfo.role}</Card.Text>
-            <Card.Title>Slot details</Card.Title>
+            <Card.Title><h3>Slot details</h3></Card.Title>
             <Card.Text>
               Timings : {this.selectedSlot.start_time} -
               {this.selectedSlot.end_time}

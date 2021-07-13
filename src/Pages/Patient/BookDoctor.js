@@ -78,7 +78,7 @@ export class BookDoctor extends Component {
           <h5>Selected slot: {this.state.selectedSlot.slot_no}</h5>
         )}
         {this.state.selectedSlot && (
-          <>
+          <><center>
             <Button
               variant="primary"
               onClick={() => this.setState({ redirect: true })}
@@ -89,8 +89,8 @@ export class BookDoctor extends Component {
               variant="danger"
               onClick={() => this.setState(this.initialState)}
             >
-              reset
-            </Button>
+              Reset
+            </Button></center>
           </>
         )}
       </div>
