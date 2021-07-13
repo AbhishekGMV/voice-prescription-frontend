@@ -2,6 +2,9 @@
   width: 20rem;
   margin: 5px;
   text-align: center;
+  background-color: #AFEEEE;
+  margin-left: 16px;
+  
 }
 
 .card a {
@@ -16,4 +19,9 @@
 .field-selected {
   background-color: green;
   color: white;
+}
+.rand2{
+  padding-left: 600px;
+  padding-top: 150px;
+  font-size: larger;
 }

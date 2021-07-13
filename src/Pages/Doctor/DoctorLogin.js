@@ -31,9 +31,9 @@ export default class DoctorLogin extends React.Component {
 
         <div className="form-group split right">
           <div style={{ fontfamily: "Sans-Serif" }}>
-            <h4>
-              <u>Doctor login</u>
-            </h4>
+            <h2>
+              Doctor login
+            </h2>
           </div>
           <form onSubmit={this.handleSubmit}>
             <div className="input-group mb-3">

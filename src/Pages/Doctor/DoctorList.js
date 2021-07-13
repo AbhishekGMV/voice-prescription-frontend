@@ -15,7 +15,7 @@ export default function Doctor({ history, match }) {
 
   return (
     <Container>
-      <div>
+      <div style={{paddingLeft:"35px"}}>
         <Button onClick={() => history.goBack()}>
           <FontAwesomeIcon icon={faArrowAltCircleLeft} />
           Go Back

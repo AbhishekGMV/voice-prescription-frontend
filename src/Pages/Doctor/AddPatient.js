@@ -58,9 +58,8 @@ export default class AddPatient extends React.Component {
       <UserNavbar userRole="doctor" userInfo={{name:this.state.dname,id:this.state.did}} />
       <div className="outFormControl">
           
-        <div className="form-control">
           <form onSubmit={this.handleSubmit}>
-          <div style={{marginBottom: '10%', fontfamily: 'Sans-Serif'}}><h4><u>Patient Register</u></h4></div>
+          <div style={{marginBottom: '10%', fontfamily: 'Sans-Serif'}}><h2>Patient Register</h2></div>
            <div className="input-group mb-3">
               <input
                 type="text"
@@ -143,7 +142,7 @@ export default class AddPatient extends React.Component {
             )}
           </form>
         </div>
-      </div></>
+      </>
     );
   }
 }

@@ -32,7 +32,7 @@ export default class PatientLogin extends React.Component {
         </div>
         
         <div className="form-group split right">
-        <div style={{fontfamily: 'Sans-Serif'}}><h4><u>Patient login</u></h4></div>
+        <div style={{fontfamily: 'Sans-Serif'}}><h2>Patient login</h2></div>
           <form onSubmit={this.handleSubmit}>
             <div className="input-group mb-3">
               <input

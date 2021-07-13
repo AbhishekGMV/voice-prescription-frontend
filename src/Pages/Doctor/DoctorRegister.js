@@ -69,13 +69,13 @@ export default class DoctorRegister extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="pic">
         <form className="form-group" onSubmit={this.handleSubmit}>
           <div style={{ fontfamily: "Sans-Serif" }}>
-            <h4>
-              <u>Doctor Register</u>
-            </h4>
-          </div>
+            <h2>
+              Doctor Register
+            </h2>
+          </div><br></br>
           <div className="input-group mb-3">
             <input
               type="text"

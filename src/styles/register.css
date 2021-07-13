@@ -16,7 +16,6 @@
   flex-direction: column;
   justify-content: space-around;
   margin: 0 auto;
-  margin-top: 90px;
   max-width: 500px;
   padding: 100px 50px;
   text-align: center;
@@ -42,8 +41,15 @@
   flex-direction: column;
   justify-content: space-around;
   margin: 0 auto;
-  margin-top: 90px;
+  margin-top: 40px;
   max-width: 500px;
-  padding: 100px 50px;
+  padding: 50px;
   text-align: center;
+}
+.pic{
+  background-image: url(../images/register.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 50px;
 }
