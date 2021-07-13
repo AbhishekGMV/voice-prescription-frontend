@@ -3,57 +3,51 @@ import api from "./../../api";
 import "./../../styles/register.css";
 import UserNavbar from "./../../components/UserNavbar";
 
-
 export default class AddPatient extends React.Component {
-
   initialState = {
     name: "",
-    pid:"",
+    pid: "",
     dob: "",
     gender: "",
     phoneNumber: "",
     error: false,
-    dname:"",
-    did:"",
+    dname: "",
+    did: "",
   };
   state = this.initialState;
   did = this.props.match.params.id;
-  
-  componentDidMount(){
-    api.get(`/doctor/${this.did}`).then((res) => {
-        if (res.data.length > 0) {
-          this.setState({ dname:res.data[0].dname,did:res.data[0].did });
-          console.log(res);
 
-        }
-  })}
-  
-  
+  componentDidMount() {
+    api.get(`/doctor/${this.did}`).then((res) => {
+      if (res.data.length > 0) {
+        this.setState({ dname: res.data[0].dname, did: res.data[0].did });
+      }
+    });
+  }
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.setState({ error: false });
-      api
-        .put("/patient/register", {
-          pname: this.state.name,
-          pid: this.state.pid,
-          dob: this.state.dob,
-          pphno: this.state.phoneNumber,
-          gender: this.state.gender,
-        })
-        .then(() => {
-          alert("Patient details updated successfully!")
-          this.props.history.push(`/doctor/${this.did}/appointment`);
-        })
-        .catch(() => {
-          this.setState({ error: true });
-        });
-    
+    api
+      .put("/patient/register", {
+        pname: this.state.name,
+        pid: this.state.pid,
+        dob: this.state.dob,
+        pphno: this.state.phoneNumber,
+        gender: this.state.gender,
+      })
+      .then((data) => {
+        alert("Patient details updated successfully!");
+        this.props.history.push(`/doctor/${this.did}/appointment`);
+      })
+      .catch(() => {
+        alert("Incorrect PID");
+        this.setState({ error: true });
+      });
   };
 
   render() {
-    return (
-       
+    return (       
        <>
       <UserNavbar userRole="doctor" userInfo={{name:this.state.dname,id:this.state.did}} />
       <div className="outFormControl">
