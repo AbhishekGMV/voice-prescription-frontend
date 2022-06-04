@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Redirect } from "react-router";
+import { Navigate } from "react-router";
 import { Button } from "react-bootstrap";
 import UserNavbar from "./../../components/UserNavbar";
 import moment from "moment";
@@ -41,7 +41,7 @@ export default function DoctorAppointment(props) {
 
   if (redirect) {
     return (
-      <Redirect
+      <Navigate
         to={{
           pathname: path.location,
           state: { bid: path.bid, slot_no: path.slot_no },

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Button, Card } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
-import { Redirect } from "react-router";
+import { Navigate } from "react-router";
 import api from "./../../api";
 export class BookingSummary extends Component {
   state = { doctorInfo: null, redirect: false };
@@ -52,7 +52,7 @@ export class BookingSummary extends Component {
   render() {
     if (this.state.redirect) {
       return (
-        <Redirect
+        <Navigate
           to={{
             pathname: `/patient/${this.pid}/appointment`,
           }}

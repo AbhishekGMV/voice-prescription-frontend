@@ -1,6 +1,6 @@
 import React from "react";
 import Homepage from "./../Pages/Homepage";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PageNotFound from "./../components/PageNotFound";
 import PatientLogin from "./../Pages/Patient/PatientLogin";
 import PatientRegister from "./../Pages/Patient/PatientRegister";
@@ -23,18 +23,18 @@ function App() {
     <div>
       {/* <AudioInput /> */}
       <BrowserRouter>
-        <Switch>
-          <Route path="/" exact component={Homepage} />
-          <Route path="/patient/login" exact component={PatientLogin} />
-          <Route path="/patient/register" exact component={PatientRegister} />
-          <Route path="/patient/:id" exact component={PatientDashboard} />
+        <Routes>
+          <Route path="/" exact element={<Homepage/>} />
+          <Route path="/patient/login" exact element={<PatientLogin/>} />
+          <Route path="/patient/register" exact element={<PatientRegister/>} />
+          <Route path="/patient/:id" exact element={<PatientDashboard/>} />
           <Route
             path="/patient/:id/appointment"
             exact
-            component={PatientAppointment}
+            element={<PatientAppointment/>}
           />
-          <Route path="/patient/:id/doctors-list" exact component={Doctor} />
-          <Route path="/patient/:id/booking" exact component={BookingPage} />
+          <Route path="/patient/:id/doctors-list" exact element={<Doctor/>} />
+          <Route path="/patient/:id/booking" exact element={<BookingPage/>} />
           <Route
             path="/patient/:id/booking-summary"
             render={(props) => <BookingSummary {...props} />}
@@ -43,23 +43,23 @@ function App() {
             path="/patient/:id/book-doctor"
             render={(props) => <BookDoctor {...props} />}
           />
-          <Route path="/doctor/login" exact component={DoctorLogin} />
-          <Route path="/doctor/register" exact component={DoctorRegister} />
+          <Route path="/doctor/login" exact element={<DoctorLogin/>} />
+          <Route path="/doctor/register" exact element={<DoctorRegister/>} />
           <Route
             path="/doctor/:id/appointment"
             exact
-            component={DoctorAppointment}
+            element={<DoctorAppointment/>}
           />
-          <Route path="/doctor/:id/add-patient" exact component={AddPatient} />
+          <Route path="/doctor/:id/add-patient" exact element={<AddPatient/>} />
           <Route
             path="/doctor/:id/process-prescription/:id"
             exact
-            component={ProcessPrescription}
+            element={<ProcessPrescription/>}
           />
-          <Route path="/doctor/:id" exact component={DoctorDashboard} />
-          <Route path="/404" component={PageNotFound} />
-          <Route component={PageNotFound} />
-        </Switch>
+          <Route path="/doctor/:id" exact element={<DoctorDashboard/>} />
+          <Route path="/404" element={<PageNotFound/>} />
+          <Route element={<PageNotFound/>} />
+        </Routes>
       </BrowserRouter>
     </div>
   );

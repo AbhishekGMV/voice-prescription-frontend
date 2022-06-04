@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Card, Row, Col, Button } from "react-bootstrap";
-import { Redirect } from "react-router";
+import { Navigate } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
@@ -36,7 +36,7 @@ export class BookingPage extends Component {
   render() {
     if (this.state.redirect) {
       return (
-        <Redirect
+        <Navigate
           to={{
             pathname: `/patient/${this.pid}/booking-summary`,
             state: {
