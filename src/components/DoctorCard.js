@@ -1,6 +1,6 @@
 import { React, useState } from "react";
 import { Card, Button } from "react-bootstrap";
-import { Redirect } from "react-router";
+import { Navigate } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
@@ -10,7 +10,7 @@ export default function DoctorCard({ doctor, match }) {
 
   if (redirect) {
     return (
-      <Redirect
+      <Navigate
         to={{
           pathname: `/patient/${pid}/book-doctor`,
           state: {

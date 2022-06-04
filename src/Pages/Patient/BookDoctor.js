@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Card, Row, Col, Button } from "react-bootstrap";
-import { Redirect } from "react-router";
+import { Navigate } from "react-router";
 import moment from "moment";
 import "./../../styles/booking-page.css";
 import api from "./../../api";
@@ -31,7 +31,7 @@ export class BookDoctor extends Component {
   render() {
     if (this.state.redirect) {
       return (
-        <Redirect
+        <Navigate
           to={{
             pathname: `/patient/${this.pid}/booking-summary`,
             state: {
