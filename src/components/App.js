@@ -24,41 +24,47 @@ function App() {
       {/* <AudioInput /> */}
       <BrowserRouter>
         <Routes>
-          <Route path="/" exact element={<Homepage/>} />
-          <Route path="/patient/login" exact element={<PatientLogin/>} />
-          <Route path="/patient/register" exact element={<PatientRegister/>} />
-          <Route path="/patient/:id" exact element={<PatientDashboard/>} />
+          <Route path="/" exact element={<Homepage />} />
+          <Route path="/patient/login" exact element={<PatientLogin />} />
+          <Route path="/patient/register" exact element={<PatientRegister />} />
+          <Route path="/patient/:pid" exact element={<PatientDashboard />} />
           <Route
-            path="/patient/:id/appointment"
+            path="/patient/:pid/appointment"
             exact
-            element={<PatientAppointment/>}
+            element={<PatientAppointment />}
           />
-          <Route path="/patient/:id/doctors-list" exact element={<Doctor/>} />
-          <Route path="/patient/:id/booking" exact element={<BookingPage/>} />
+          <Route path="/patient/:pid/doctors-list" exact element={<Doctor />} />
+          <Route path="/patient/:pid/booking" exact element={<BookingPage />} />
           <Route
-            path="/patient/:id/booking-summary"
-            render={(props) => <BookingSummary {...props} />}
-          />
-          <Route
-            path="/patient/:id/book-doctor"
-            render={(props) => <BookDoctor {...props} />}
-          />
-          <Route path="/doctor/login" exact element={<DoctorLogin/>} />
-          <Route path="/doctor/register" exact element={<DoctorRegister/>} />
-          <Route
-            path="/doctor/:id/appointment"
+            path="/patient/:pid/booking-summary"
             exact
-            element={<DoctorAppointment/>}
+            element={<BookingSummary />}
           />
-          <Route path="/doctor/:id/add-patient" exact element={<AddPatient/>} />
           <Route
-            path="/doctor/:id/process-prescription/:id"
+            path="/patient/:pid/book-doctor"
             exact
-            element={<ProcessPrescription/>}
+            element={<BookDoctor />}
           />
-          <Route path="/doctor/:id" exact element={<DoctorDashboard/>} />
-          <Route path="/404" element={<PageNotFound/>} />
-          <Route element={<PageNotFound/>} />
+          <Route path="/doctor/login" exact element={<DoctorLogin />} />
+          <Route path="/doctor/register" exact element={<DoctorRegister />} />
+          <Route
+            path="/doctor/:did/appointment"
+            exact
+            element={<DoctorAppointment />}
+          />
+          <Route
+            path="/doctor/:did/add-patient"
+            exact
+            element={<AddPatient />}
+          />
+          <Route
+            path="/doctor/:did/process-prescription/:did"
+            exact
+            element={<ProcessPrescription />}
+          />
+          <Route path="/doctor/:did" exact element={<DoctorDashboard />} />
+          <Route path="/404" element={<PageNotFound />} />
+          <Route element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
     </div>

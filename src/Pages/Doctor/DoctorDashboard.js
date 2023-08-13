@@ -12,16 +12,18 @@ import {
   faPlayCircle,
   faStepForward,
 } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function DoctorDashboard({ match, history }) {
+export default function DoctorDashboard() {
+  const navigate = useNavigate();
   const [consultationInfo, setConsultationInfo] = useState([]);
   const [doctorInfo, setDoctorInfo] = useState({ name: "", id: "" });
-  const did = match.params.id;
+  const { did } = useParams();
 
   useEffect(() => {
     let parsed = Number.parseInt(did);
     if (Number.isNaN(parsed)) {
-      history.push("/404");
+      navigate("/404");
     }
 
     api.get(`/doctor/${did}`).then((res) => {
@@ -39,7 +41,7 @@ export default function DoctorDashboard({ match, history }) {
         });
       });
     });
-  }, [did, history]);
+  }, [did, navigate]);
 
   const viewPrescription = (dataUrl) => {
     let image = new Image();

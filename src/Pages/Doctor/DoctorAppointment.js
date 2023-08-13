@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Navigate } from "react-router";
 import { Button } from "react-bootstrap";
+import { useParams, useNavigate } from "react-router-dom";
 import UserNavbar from "./../../components/UserNavbar";
 import moment from "moment";
 import api from "../../api";
 
-export default function DoctorAppointment(props) {
-  const did = props.match.params.id;
+export default function DoctorAppointment() {
+  const { did } = useParams();
+  const navigate = useNavigate();
   const [appointmentList, setAppointmentList] = useState([]);
   const [doctorInfo, setDoctorInfo] = useState([]);
   const [path, setPath] = useState({ location: "", bid: "", slot_no: "" });
-  const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
     api.get(`/doctor/${did}`).then((res) => {
@@ -38,17 +38,6 @@ export default function DoctorAppointment(props) {
       });
     });
   }, [did]);
-
-  if (redirect) {
-    return (
-      <Navigate
-        to={{
-          pathname: path.location,
-          state: { bid: path.bid, slot_no: path.slot_no },
-        }}
-      />
-    );
-  }
 
   return (
     <div>
@@ -89,7 +78,12 @@ export default function DoctorAppointment(props) {
                             bid: appointment.bid,
                             slot_no: appointment.slot_no,
                           });
-                          setRedirect(true);
+                          navigate(path.location, {
+                            state: {
+                              bid: path.bid,
+                              slot_no: path.slot_no,
+                            },
+                          });
                         }}
                       >
                         Make prescription

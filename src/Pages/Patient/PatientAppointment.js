@@ -1,38 +1,26 @@
-import { React, useCallback, useEffect, useState } from "react";
+import { React, useEffect, useState } from "react";
 import moment from "moment";
 import UserNavbar from "./../../components/UserNavbar";
 import api from "./../../api";
 import "./../../styles/appointment-page.css";
 import { Button } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function PatientAppointment({ match, history }) {
+export default function PatientAppointment() {
   const [appointmentInfo, setAppointmentInfo] = useState([]);
   const [patientInfo, setPatientInfo] = useState({ name: "", id: "" });
-  const pid = match.params.id;
+  const { pid } = useParams();
+  const navigate = useNavigate();
 
-  const fetchAppointmentInfo = useCallback(() => {
-    //using callback since function cannot to added to deps array in useEffect
-    api.get(`/appointment/patient/${pid}`).then((res) => {
-      res.data.map((app) => {
-        return api
-          .get(`/doctor/${app.did}`)
-          .then((doc) => {
-            app["reason"] = doc.data[0].role;
-            app["dname"] = doc.data[0].dname;
-            app["did"] = doc.data[0].did;
-            app["booking_date"] = moment(app.booking_date).format("MMM Do, YY");
-            app["start_time"] = moment(app.start_time, "hh:mm").format(
-              "hh:mm a"
-            );
-            app["end_time"] = moment(app.end_time, "hh:mm").format("hh:mm a");
-            setAppointmentInfo((prev) => [...prev, app]);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      });
-    });
-  }, [pid]);
+  const formatData = (app, doc) => {
+    app["reason"] = doc.data[0].role;
+    app["dname"] = doc.data[0].dname;
+    app["did"] = doc.data[0].did;
+    app["booking_date"] = moment(app.booking_date).format("MMM Do, YY");
+    app["start_time"] = moment(app.start_time, "hh:mm").format("hh:mm a");
+    app["end_time"] = moment(app.end_time, "hh:mm").format("hh:mm a");
+    return app;
+  };
 
   const cancelAppointment = (bid, did, slot_no) => {
     let sure = window.confirm("Are you sure?");
@@ -45,7 +33,19 @@ export default function PatientAppointment({ match, history }) {
         })
         .then(() => {
           setAppointmentInfo([]);
-          fetchAppointmentInfo();
+          api.get(`/appointment/patient/${pid}`).then((res) => {
+            res.data.map((app) => {
+              return api
+                .get(`/doctor/${app.did}`)
+                .then((doc) => {
+                  const data = formatData(app, doc);
+                  setAppointmentInfo((prev) => [...prev, data]);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            });
+          });
         })
         .catch((err) => {
           console.error(err);
@@ -57,7 +57,7 @@ export default function PatientAppointment({ match, history }) {
   useEffect(() => {
     let parsed = Number.parseInt(pid);
     if (Number.isNaN(parsed)) {
-      history.push("/404");
+      navigate("/404");
     }
 
     api.get(`/patient/${pid}`).then((res) => {
@@ -65,8 +65,21 @@ export default function PatientAppointment({ match, history }) {
         setPatientInfo({ name: res.data[0].pname, id: res.data[0].pid });
       }
     });
-    fetchAppointmentInfo();
-  }, [pid, history, fetchAppointmentInfo]);
+
+    api.get(`/appointment/patient/${pid}`).then((res) => {
+      res.data.map((app) => {
+        return api
+          .get(`/doctor/${app.did}`)
+          .then((doc) => {
+            const data = formatData(app, doc);
+            setAppointmentInfo((prev) => [...prev, data]);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+    });
+  }, [navigate, pid]);
 
   return (
     <div>

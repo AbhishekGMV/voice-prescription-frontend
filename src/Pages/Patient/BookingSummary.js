@@ -1,45 +1,48 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Card } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
-import { Navigate } from "react-router";
+import { useNavigate, useLocation } from "react-router-dom";
 import api from "./../../api";
-export class BookingSummary extends Component {
-  state = { doctorInfo: null, redirect: false };
-  bookingInfo = this.props.location.state;
-  doctorInfo = this.bookingInfo.doctor;
-  role = this.bookingInfo.field ? this.bookingInfo.field : "";
-  pid = this.bookingInfo.pid;
-  selectedSlot = this.bookingInfo.selectedSlot;
 
-  componentDidMount() {
-    if (this.role.length > 0) {
-      return api
+export function BookingSummary() {
+  const [doctorInfo, setDoctorInfo] = useState(null);
+  const { state } = useLocation();
+  const navigate = useNavigate();
+  const bookingInfo = state;
+  const doctor = bookingInfo.doctor;
+  const role = bookingInfo.field ? bookingInfo.field : "";
+  const pid = bookingInfo.pid;
+  const selectedSlot = bookingInfo.selectedSlot;
+
+  useEffect(() => {
+    if (role.length > 0) {
+      api
         .post("/get-doctor-with-role", {
-          role: this.role,
+          role,
         })
         .then(({ data }) => {
-          this.setState({ doctorInfo: data });
+          setDoctorInfo(data);
         })
         .catch((err) => {
           console.error(err);
         });
     } else {
-      this.setState({ doctorInfo: this.doctorInfo });
+      setDoctorInfo(doctor);
     }
-  }
+  }, [doctor, role]);
 
-  handleBookingConfirmation() {
+  const handleBookingConfirmation = () => {
     api
       .post("/book-slot", {
-        slotNo: this.selectedSlot.slot_no,
-        pid: this.bookingInfo.pid,
-        did: this.state.doctorInfo.did,
+        slotNo: selectedSlot.slot_no,
+        pid,
+        did: doctorInfo.did,
       })
       .then((res) => {
         if (res.status === 200 && res.statusText === "OK") {
           alert("Booking successful");
-          this.setState({ redirect: true });
+          navigate(`/patient/${pid}/appointment`);
         } else {
           alert("Doctors currently available");
         }
@@ -47,48 +50,39 @@ export class BookingSummary extends Component {
       .catch(() => {
         alert("Doctors currently available");
       });
-  }
+  };
 
-  render() {
-    if (this.state.redirect) {
-      return (
-        <Navigate
-          to={{
-            pathname: `/patient/${this.pid}/appointment`,
-          }}
-        />
-      );
-    }
-
-    <Button onClick={() => this.props.history.goBack()}>
-      <FontAwesomeIcon icon={faArrowAltCircleLeft} />
-      Go Back
-    </Button>;
-    if (this.state.doctorInfo && this.selectedSlot) {
-      return (
+  return (
+    <>
+      <Button onClick={() => navigate(-1)}>
+        <FontAwesomeIcon icon={faArrowAltCircleLeft} />
+        Go Back
+      </Button>
+      {doctorInfo && selectedSlot ? (
         <div className="rand2">
           <Card>
-            <Card.Title><h3>Doctor details</h3></Card.Title>
-            <Card.Text>Name: {this.state.doctorInfo.dname}</Card.Text>
-            <Card.Text>Email: {this.state.doctorInfo.demail}</Card.Text>
-            <Card.Text>Phone: {this.state.doctorInfo.dphno}</Card.Text>
-            <Card.Text>Specialization: {this.state.doctorInfo.role}</Card.Text>
-            <Card.Title><h3>Slot details</h3></Card.Title>
+            <Card.Title>
+              <h3>Doctor details</h3>
+            </Card.Title>
+            <Card.Text>Name: {doctorInfo.dname}</Card.Text>
+            <Card.Text>Email: {doctorInfo.demail}</Card.Text>
+            <Card.Text>Phone: {doctorInfo.dphno}</Card.Text>
+            <Card.Text>Specialization: {doctorInfo.role}</Card.Text>
+            <Card.Title>
+              <h3>Slot details</h3>
+            </Card.Title>
             <Card.Text>
-              Timings : {this.selectedSlot.start_time} -
-              {this.selectedSlot.end_time}
+              Timings : {selectedSlot.start_time} - {selectedSlot.end_time}
             </Card.Text>
 
-            <Button onClick={() => this.handleBookingConfirmation()}>
-              Confirm booking
-            </Button>
+            <Button onClick={handleBookingConfirmation}>Confirm booking</Button>
           </Card>
         </div>
-      );
-    } else {
-      return <h2>No doctors available for selected slot</h2>;
-    }
-  }
+      ) : (
+        <h2>No doctors available for selected slot</h2>
+      )}
+    </>
+  );
 }
 
 export default BookingSummary;

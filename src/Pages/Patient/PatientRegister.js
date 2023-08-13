@@ -1,162 +1,167 @@
-import React from "react";
+import React, { useState } from "react";
 import api from "./../../api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./../../styles/register.css";
 
-export default class PatientRegister extends React.Component {
-  initialState = {
-    name: "",
-    email: "",
-    dob: "",
-    gender: "",
-    phoneNumber: "",
-    password: "",
-    confirmPassword: "",
-    error: false,
-  };
+export default function PatientRegister() {
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [dob, setDob] = useState("");
+  const [gender, setGender] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState(false);
 
-  state = this.initialState;
-
-  handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    this.setState({ error: false });
-    if (this.state.password !== this.state.confirmPassword) {
-      this.setState({ error: true });
-    } else {
-      api
-        .post("/patient/register", {
-          name: this.state.name,
-          email: this.state.email,
-          dob: this.state.dob,
-          phno: this.state.phoneNumber,
-          password: this.state.password,
-          gender: this.state.gender,
-        })
-        .then(({ data }) => {
-          let pid = data[0];
-          this.props.history.push(`/patient/${pid}`);
-        })
-        .catch(() => {
-          this.setState({ error: true });
-        });
+    setError(false);
+
+    if (password !== confirmPassword) {
+      setError(true);
+      return;
     }
+    const payload = {
+      name: name,
+      email: email,
+      dob: dob,
+      phno: phoneNumber,
+      password: password,
+      gender: gender,
+    };
+
+    api
+      .post("/patient/register", payload)
+      .then(({ data }) => {
+        let pid = data[0];
+        navigate(`/patient/${pid}`, {
+          state: {
+            pid,
+          },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        setError(true);
+      });
   };
 
-  render() {
-    return (
-      <div className="pic">
+  const handleFormClear = () => {
+    setName("");
+    setEmail("");
+    setGender("");
+    setPassword("");
+    setConfirmPassword("");
+    setDob("");
+    setPhoneNumber("");
+    setError(false);
+  };
+
+  return (
+    <div className="pic">
       <div className="outFormControl">
-        <div style={{marginBottom: '10%', fontfamily: 'Sans-Serif'}}><h2>Patient Register</h2></div><br></br>
+        <div style={{ marginBottom: "10%", fontfamily: "Sans-Serif" }}>
+          <h2>Patient Register</h2>
+        </div>
+        <br></br>
         {}
-          <form onSubmit={this.handleSubmit}>
-          
-            <div className="input-group mb-3">
-              <input
-                type="text"
-                value={this.state.name}
-                className="form-control"
-                placeholder="Name"
-                required
-                onChange={(e) => this.setState({ name: e.target.value })}
-              />
-            </div>
-            <div className="input-group mb-3">
-              <input
-                type="email"
-                className="form-control"
-                value={this.state.email}
-                placeholder="example@email.com(optional)"
-                onChange={(e) => this.setState({ email: e.target.value })}
-              />{" "}
-            </div>
-            <div className="input-group mb-3">
-              <input
-                type="date"
-                className="form-control"
-                value={this.state.dob}
-                required
-                onChange={(e) => this.setState({ dob: e.target.value })}
-              />
-            </div>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="flexRadioDefault"
-                required
-                onChange={(e) => {
-                  this.setState({ gender: e.currentTarget.value });
-                }}
-                checked={this.state.gender === "Male"}
-                value="Male"
-              />
-              <label>Male</label>
-            </div>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="radio"
-                required
-                name="flexRadioDefault"
-                onChange={(e) => {
-                  this.setState({ gender: e.currentTarget.value });
-                }}
-                value="Female"
-                checked={this.state.gender === "Female"}
-              />
-              <label>Female</label>
-            </div>
-            <div className="input-group mb-3">
-              <input
-                type="text"
-                className="form-control"
-                value={this.state.phoneNumber}
-                required
-                placeholder="Phone number"
-                onChange={(e) => this.setState({ phoneNumber: e.target.value })}
-              />
-            </div>
-            <div className="input-group mb-3">
-              <input
-                type="password"
-                className="form-control"
-                value={this.state.password}
-                required
-                placeholder="Password"
-                onChange={(e) => this.setState({ password: e.target.value })}
-              />
-            </div>
-            <div className="input-group mb-3">
-              <input
-                type="password"
-                className="form-control"
-                value={this.state.confirmPassword}
-                required
-                placeholder="Confirm password"
-                onChange={(e) =>
-                  this.setState({ confirmPassword: e.target.value })
-                }
-              />
-            </div>
-            <div className="btn-section">
-              <input type="submit" className="btn btn-success" />
-              <input
-                className="btn btn-danger"
-                type="reset"
-                onClick={() => this.setState(this.initialState)}
-              />
-            </div>
-            {this.state.error ? (
-              <div className="error"> Unable to register</div>
-            ) : (
-              ""
-            )}
-            <span>Already have an account? </span>{" "}
-            <Link to="/patient/login">Login here</Link>
-          </form>
-        </div>
-        </div>
-      
-    );
-  }
+        <form onSubmit={handleSubmit} id="form">
+          <div className="input-group mb-3">
+            <input
+              type="text"
+              value={name}
+              className="form-control"
+              placeholder="Name"
+              required
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="input-group mb-3">
+            <input
+              type="email"
+              className="form-control"
+              value={email}
+              placeholder="example@email.com(optional)"
+              onChange={(e) => setEmail(e.target.value)}
+            />{" "}
+          </div>
+          <div className="input-group mb-3">
+            <input
+              type="date"
+              className="form-control"
+              value={dob}
+              required
+              onChange={(e) => setDob(e.target.value)}
+            />
+          </div>
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              type="radio"
+              name="flexRadioDefault"
+              required
+              onChange={(e) => setGender(e.target.value)}
+              checked={gender === "M"}
+              value="M"
+            />
+            <label>Male</label>
+          </div>
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              type="radio"
+              required
+              name="flexRadioDefault"
+              onChange={(e) => setGender(e.target.value)}
+              value="F"
+              checked={gender === "F"}
+            />
+            <label>Female</label>
+          </div>
+          <div className="input-group mb-3">
+            <input
+              type="text"
+              className="form-control"
+              value={phoneNumber}
+              required
+              placeholder="Phone number"
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+          </div>
+          <div className="input-group mb-3">
+            <input
+              type="password"
+              className="form-control"
+              value={password}
+              required
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div className="input-group mb-3">
+            <input
+              type="password"
+              className="form-control"
+              value={confirmPassword}
+              required
+              placeholder="Confirm password"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </div>
+          <div className="btn-section">
+            <input type="submit" className="btn btn-success" />
+            <input
+              className="btn btn-danger"
+              type="reset"
+              onClick={handleFormClear}
+            />
+          </div>
+          {error ? <div className="error"> Unable to register</div> : ""}
+          <span>Already have an account? </span>{" "}
+          <Link to="/patient/login">Login here</Link>
+        </form>
+      </div>
+    </div>
+  );
 }

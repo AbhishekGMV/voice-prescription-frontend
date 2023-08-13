@@ -12,18 +12,18 @@ import {
   faPlayCircle,
   faStepForward,
 } from "@fortawesome/free-solid-svg-icons";
+import { useParams, useNavigate } from "react-router-dom";
 
-// import { Button } from "react-bootstrap";
-
-export default function PatientDashboard({ match, history }) {
+export default function PatientDashboard() {
   const [consultationInfo, setConsultationInfo] = useState([]);
   const [patientInfo, setPatientInfo] = useState({ name: "", id: "" });
-  const pid = match.params.id;
+  const navigate = useNavigate();
+  const { pid } = useParams();
 
   useEffect(() => {
     let parsed = Number.parseInt(pid);
     if (Number.isNaN(parsed)) {
-      history.push("/404");
+      navigate("/404");
     }
 
     api.get(`/patient/${pid}`).then((res) => {
@@ -41,7 +41,7 @@ export default function PatientDashboard({ match, history }) {
         });
       });
     });
-  }, [pid, history]);
+  }, [navigate, pid]);
 
   const viewPrescription = (dataUrl) => {
     let image = new Image();
