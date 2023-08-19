@@ -40,7 +40,7 @@ export function BookingSummary() {
         did: doctorInfo.did,
       })
       .then((res) => {
-        if (res.status === 200 && res.statusText === "OK") {
+        if (res.status === 200) {
           alert("Booking successful");
           navigate(`/patient/${pid}/appointment`);
         } else {
