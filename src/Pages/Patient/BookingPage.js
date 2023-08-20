@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card, Row, Col, Button } from "react-bootstrap";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
@@ -9,13 +9,11 @@ import api from "./../../api";
 
 export function BookingPage() {
   const navigate = useNavigate();
-  const { state } = useLocation();
-
-  const pid = state?.pid || 1;
   const [slots, setSlots] = useState([]);
   const [showTiming, setShowTiming] = useState(false);
   const [selectedField, setSelectedField] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState({});
+  const { pid } = useParams();
 
   useEffect(() => {
     api.get("./get-available-slots").then(({ data }) => {
