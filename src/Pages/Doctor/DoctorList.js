@@ -11,7 +11,7 @@ export default function Doctor({ match }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.get("/get-available-doctors").then((res) => {
+    api.get("/doctor/get-available-doctors").then((res) => {
       setDoctors(res.data);
     });
   }, []);
