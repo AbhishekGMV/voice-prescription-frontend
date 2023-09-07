@@ -14,7 +14,7 @@ export function BookDoctor() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.get("/get-available-slots").then(({ data }) => {
+    api.get("/booking/get-available-slots").then(({ data }) => {
       data.map((slot) => {
         slot["slot_start"] = moment(slot.slot_start, "hh:mm a").format(
           "h:mm a"

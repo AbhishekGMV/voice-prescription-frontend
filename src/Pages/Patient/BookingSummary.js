@@ -18,7 +18,7 @@ export function BookingSummary() {
   useEffect(() => {
     if (role.length > 0) {
       api
-        .post("/get-doctor-with-role", {
+        .post("/doctor/get-doctor-with-role", {
           role,
         })
         .then(({ data }) => {
@@ -34,7 +34,7 @@ export function BookingSummary() {
 
   const handleBookingConfirmation = () => {
     api
-      .post("/book-slot", {
+      .post("/booking/book-slot", {
         slotNo: selectedSlot.slot_no,
         pid,
         did: doctorInfo.did,
